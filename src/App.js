@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import Recipie from './Recipie';
 
 var PaleAle = require('json!../paleAle.json');
 
@@ -11,6 +12,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Recipie recipie={this.state} />
         <div>
           {JSON.stringify(this.state)}
         </div>
