@@ -12,7 +12,7 @@ export default ({fermentables}) => (
     {fermentables.map((fermentable) =>
     <tr key={fermentable.name}>
       <td>{fermentable.name}</td>
-      <td>{fermentable.weight}</td>
+      <td>{fermentable.amount}</td>
     </tr>
     )}
   </tbody>

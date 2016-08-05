@@ -4,6 +4,8 @@ import Recipie from './Recipie';
 
 var PaleAle = require('json!../paleAle.json');
 
+PaleAle = PaleAle.recipes.recipe[0];
+
 class App extends Component {
   constructor(props) {
     super(props);
