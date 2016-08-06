@@ -1,6 +1,6 @@
 {
-  "recipes": {
-    "recipe": [{
+  "recipes": [
+    {
       "name": "American Pale Ale - BYO",
       "version":"1",
       "type":"All Grain",
@@ -10,8 +10,8 @@
       "boil_size":"24.6810271",
       "boil_time":"60.0000000",
       "efficiency":"65.0000000",
-      "hops": {
-        "hop": [{
+      "hops": [
+        {
           "name":"Horizon",
           "version":"1",
           "origin": "U.S.",
@@ -129,10 +129,10 @@
           "display_amount":"0.50 oz",
           "inventory":"0.00 oz",
           "display_time":"60.0 min"
-        }]
-      },
-      "fermentables": {
-        "fermentable": [{
+        }
+      ],
+      "fermentables": [
+        {
           "name":"Pale Malt (2 Row) US",
           "version":"1",
           "type":"Grain",
@@ -227,10 +227,10 @@
           "potential":"1.0386400",
           "display_color":"2.0 SRM",
           "extract_substitute":"Wheat Liquid Extract"
-        }]
-      },
-      "miscs": {
-        "misc": [{
+        }
+      ],
+      "miscs": [
+        {
           "name":"PH 5.2 Stabilizer",
           "version":"1",
           "type":"Water Agent",
@@ -259,10 +259,10 @@
           "inventory":"0.00 tsp",
           "display_time":"10.0 mins",
           "batch_size":"5.00 gal"
-        }]
-      },
-      "yeasts": {
-        "yeast": [{
+        }
+      ],
+      "yeasts": [
+        {
           "name": "California Ale",
           "version":"1",
           "type":"Ale",
@@ -285,8 +285,8 @@
           "disp_max_temp":"73.0 F",
           "inventory":"0.0 pkg",
           "culture_date":"14 Jun 2003"
-        }]
-      },
+        }
+      ],
       "style": {
         "name": "American Pale Ale",
         "version":"1",
@@ -366,8 +366,8 @@
         "display_tun_temp":"72.0 F",
         "display_sparge_temp":"168.0 F",
         "display_tun_weight":"4 lbs",
-        "mash_steps": {
-          "mash_step": {
+        "mash_steps": [
+          {
             "name": "Mash In",
             "version":"1",
             "type":"Infusion",
@@ -383,7 +383,7 @@
             "display_step_temp":"152.0 F",
             "display_infuse_amt":"15.31 qt"
           }
-        }
+        ]
       },
       "notes":"",
       "taste_notes":"",
@@ -424,6 +424,6 @@
       "display_secondary_temp":"67.0 F",
       "display_tertiary_temp":"65.0 F",
       "display_age_temp":"65.0 F"
-    }]
-  }
+    }
+  ]
 }

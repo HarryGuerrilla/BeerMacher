@@ -1,4 +1,10 @@
 import React from 'react';
+import Qty from 'js-quantities';
+
+const amountToLb = (amount) => {
+  let qty = new Qty(amount + 'kg');
+  return(qty.to('lb').toPrec('0.025 lb').toString());
+}
 
 export default ({fermentables}) => (
   <table>
@@ -10,11 +16,11 @@ export default ({fermentables}) => (
     </thead>
     <tbody>
     {fermentables.map((fermentable) =>
-    <tr key={fermentable.name}>
-      <td>{fermentable.name}</td>
-      <td>{fermentable.amount}</td>
-    </tr>
-    )}
+       <tr key={fermentable.name}>
+         <td>{fermentable.name}</td>
+         <td>{amountToLb(fermentable.amount)}</td>
+       </tr>
+     )}
   </tbody>
   </table>
 );

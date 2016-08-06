@@ -9,7 +9,7 @@ export default ({recipie, ...props}) => (
     <ul>
       <li> Batch Size: {recipie.batch_size} </li>
       <li> Boil Size: {recipie.boil_size} </li>
-    <Fermentables fermentables={recipie.fermentables.fermentable} />
+    <Fermentables fermentables={recipie.fermentables} />
     </ul>
   </div>
 );

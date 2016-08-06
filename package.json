@@ -8,6 +8,7 @@
   "dependencies": {
     "brauhaus": "^1.1.1",
     "brauhaus-beerxml": "^1.0.0",
+    "js-quantities": "^1.6.1",
     "react": "^15.2.1",
     "react-dom": "^15.2.1"
   },
