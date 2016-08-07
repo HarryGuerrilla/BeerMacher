@@ -13,10 +13,12 @@ class App extends Component {
   }
   render() {
     return (
-      <div className="App">
+      <div className="container App">
         <Recipie recipie={this.state} />
         <div>
-          {JSON.stringify(this.state)}
+          <pre className="text-left">
+            {JSON.stringify(this.state, null, 2)}
+          </pre>
         </div>
       </div>
     );
