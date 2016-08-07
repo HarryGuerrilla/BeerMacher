@@ -8,6 +8,7 @@
   "dependencies": {
     "brauhaus": "^1.1.1",
     "brauhaus-beerxml": "^1.0.0",
+    "classnames": "^2.2.5",
     "js-quantities": "^1.6.1",
     "react": "^15.2.1",
     "react-bootstrap": "^0.30.2",
