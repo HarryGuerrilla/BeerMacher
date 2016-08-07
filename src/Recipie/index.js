@@ -1,5 +1,6 @@
 import React from 'react';
-import Fermentables from './Fermentables'
+import Fermentables from './Fermentables';
+import Hops from './Hops';
 
 export default ({recipie, ...props}) => (
   <div className="row">
@@ -10,6 +11,7 @@ export default ({recipie, ...props}) => (
       <li> Batch Size: {recipie.batch_size} </li>
       <li> Boil Size: {recipie.boil_size} </li>
     <Fermentables fermentables={recipie.fermentables} />
+    <Hops hops={ recipie.hops } />
     </ul>
   </div>
 );
