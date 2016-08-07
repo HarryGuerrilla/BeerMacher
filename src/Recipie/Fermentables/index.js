@@ -2,9 +2,18 @@ import React from 'react';
 import Qty from 'js-quantities';
 import { Button } from 'react-bootstrap';
 
+const roundDown = () => {
+  return (scalar, units) => {
+    return Math.floor(scalar) + ' ' + units;
+  };
+};
+
 const amountToLb = (amount) => {
   let qty = new Qty(amount + 'kg');
-  return(qty.to('lb').toPrec('0.025 lb').toString());
+  qty = qty.to('lb');
+  let qty2 = qty.sub(qty.format('lb', roundDown()));
+  qty2 = qty2.to('oz');
+  return(qty.format('lb', roundDown()).toString() + ' ' + qty2.toPrec('oz').toString());
 }
 
 export default ({fermentables}) => (
