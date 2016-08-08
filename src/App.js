@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 import classNames from 'classnames';
 import './App.css';
-import Recipie from './Recipie';
+import Recipe from './Recipe';
 
 var PaleAle = require('json!../paleAle.json');
 
@@ -26,7 +26,7 @@ class App extends Component {
     });
     return (
       <div className="container App">
-        <Recipie recipie={this.state} />
+        <Recipe recipie={this.state} />
         <div className="text-left" >
           <Button onClick={ this.toggleData }>View State</Button>
         </div>
