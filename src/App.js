@@ -26,7 +26,7 @@ class App extends Component {
     });
     return (
       <div className="container App">
-        <Recipe recipie={this.state} />
+        <Recipe recipe={this.state} />
         <div className="text-left" >
           <Button onClick={ this.toggleData }>View State</Button>
         </div>

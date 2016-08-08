@@ -5,7 +5,7 @@ import Hops from './Hops';
 export default ({recipe, ...props}) => (
   <div className="row">
     <h1>
-      {recipie.name}
+      {recipe.name}
     </h1>
     <ul className="unstyled">
       <li> Batch Size: {recipe.batch_size} </li>
