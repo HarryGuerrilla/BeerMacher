@@ -1,20 +1,6 @@
 import React from 'react';
-import Qty from 'js-quantities';
+import formatUnit from '../../format-units';
 import { Button } from 'react-bootstrap';
-
-const roundDown = () => {
-  return (scalar, units) => {
-    return Math.floor(scalar) + ' ' + units;
-  };
-};
-
-const amountToLb = (amount) => {
-  let qty = new Qty(amount + 'kg');
-  qty = qty.to('lb');
-  let qty2 = qty.sub(qty.format('lb', roundDown()));
-  qty2 = qty2.to('oz');
-  return(qty.format('lb', roundDown()).toString() + ' ' + qty2.toPrec('oz').toString());
-}
 
 export default ({fermentables}) => (
   <div className="span6">
@@ -31,7 +17,9 @@ export default ({fermentables}) => (
       {fermentables.map((fermentable) =>
         <tr key={fermentable.name}>
           <td>{fermentable.name}</td>
-          <td>{amountToLb(fermentable.amount)}</td>
+          <td>{formatUnit({ amount: fermentable.amount + 'kg',
+                            major_unit: 'lb',
+                            minor_unit: 'oz' })}</td>
           <td><Button className="btn-mini"><i className="icon-trash" /></Button></td>
         </tr>
       )}
