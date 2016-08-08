@@ -1,6 +1,8 @@
 import React from 'react';
 import Fermentables from './Fermentables';
 import Hops from './Hops';
+import formatUnit from '../format-units';
+
 
 export default ({recipe, ...props}) => (
   <div className="row">
@@ -8,8 +10,8 @@ export default ({recipe, ...props}) => (
       {recipe.name}
     </h1>
     <ul className="unstyled">
-      <li> Batch Size: {recipe.batch_size} </li>
-      <li> Boil Size: {recipe.boil_size} </li>
+    <li> Batch Size: {formatUnit({amount: recipe.batch_size + 'L', major_unit: 'gal', minor_unit: 'floz'})} </li>
+      <li> Boil Size: {formatUnit({amount: recipe.boil_size + 'L', major_unit: 'gal', minor_unit: 'floz'})} </li>
     <Fermentables fermentables={recipe.fermentables} />
     <Hops hops={ recipe.hops } />
     </ul>
