@@ -2,13 +2,15 @@ import React from 'react';
 import formatUnit from '../../format-units';
 import { Button } from 'react-bootstrap';
 
-export default ({fermentables}) => (
+export default ({fermentables, totalWeight}) => (
   <div className="span6">
     <h2>Fermentables</h2>
     <table className="table table-hover table-bordered table-condensed">
       <thead>
         <tr>
           <th>Fermentable</th>
+          <th>Use</th>
+          <th>%</th>
           <th>Weight</th>
           <th></th>
         </tr>
@@ -17,9 +19,11 @@ export default ({fermentables}) => (
       {fermentables.map((fermentable) =>
         <tr key={fermentable.name}>
           <td>{fermentable.name}</td>
-          <td>{formatUnit({ amount: fermentable.amount + 'kg',
-                            major_unit: 'lb',
-                            minor_unit: 'oz' })}</td>
+          <td>{fermentable.type}</td>
+          <td>{Number((fermentable.amount / totalWeight)*100).toFixed(1) + '%'}</td>
+                        <td>{formatUnit({ amount: fermentable.amount + 'kg',
+                                          major_unit: 'lb',
+                                          minor_unit: 'oz' })}</td>
           <td><Button className="btn-mini"><i className="icon-trash" /></Button></td>
         </tr>
       )}
