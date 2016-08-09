@@ -21,7 +21,7 @@ export default ({hops}) => (
         <tr>
           <td>{hop.name}</td>
           <td>{hop.use}</td>
-                <td>{formatUnits({amount: hop.time + 'min', major_unit: 'min'})}</td>
+          <td>{formatUnits({amount: hop.time + 'min', major_unit: 'min'})}</td>
           <td>{formatUnits({amount: hop.amount + 'kg', major_unit: 'oz'})}</td>
           <td><Button className="btn-mini"><i className="icon-trash" /></Button></td>
         </tr>
