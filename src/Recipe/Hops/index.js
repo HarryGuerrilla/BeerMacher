@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import {Button, Glyphicon} from 'react-bootstrap';
 import formatUnits from '../../format-units';
 
 
@@ -23,7 +23,7 @@ export default ({hops}) => (
           <td>{hop.use}</td>
           <td>{formatUnits({amount: hop.time + 'min', major_unit: 'min'})}</td>
           <td>{formatUnits({amount: hop.amount + 'kg', major_unit: 'oz'})}</td>
-          <td><Button className="btn-mini"><i className="icon-trash" /></Button></td>
+          <td><Button className="btn-mini"><Glyphicon glyph="trash" /></Button></td>
         </tr>
       )}
       </tbody>

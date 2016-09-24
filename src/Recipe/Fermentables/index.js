@@ -1,6 +1,6 @@
 import React from 'react';
 import formatUnit from '../../format-units';
-import { Button } from 'react-bootstrap';
+import { Button, Glyphicon } from 'react-bootstrap';
 
 export default ({fermentables, totalWeight}) => (
   <div className="span6">
@@ -24,7 +24,7 @@ export default ({fermentables, totalWeight}) => (
                         <td>{formatUnit({ amount: fermentable.amount + 'kg',
                                           major_unit: 'lb',
                                           minor_unit: 'oz' })}</td>
-          <td><Button className="btn-mini"><i className="icon-trash" /></Button></td>
+          <td><Button className="btn-mini"><Glyphicon glyph="trash" /></Button></td>
         </tr>
       )}
     </tbody>

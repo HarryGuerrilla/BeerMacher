@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Navbar } from 'react-bootstrap';
 import classNames from 'classnames';
 import './App.css';
 import Recipe from './Recipe';
@@ -25,15 +25,24 @@ class App extends Component {
       collapse: true,
     });
     return (
-      <div className="container App">
-        <Recipe recipe={this.state} />
-        <div className="text-left" >
-          <Button onClick={ this.toggleData }>View State</Button>
-        </div>
-        <div className={dataClass}>
-          <pre className="text-left">
-            {JSON.stringify(this.state, null, 2)}
-          </pre>
+      <div>
+        <Navbar role="navigation" fixedTop="true">
+          <Navbar.Header>
+            <Navbar.Brand>
+              <a href="#">Recipes</a>
+            </Navbar.Brand>
+          </Navbar.Header>
+        </Navbar>
+        <div className="container App">
+          <Recipe recipe={this.state} />
+          <div className="text-left" >
+            <Button onClick={ this.toggleData }>View State</Button>
+          </div>
+          <div className={dataClass}>
+            <pre className="text-left">
+              {JSON.stringify(this.state, null, 2)}
+            </pre>
+          </div>
         </div>
       </div>
     );
