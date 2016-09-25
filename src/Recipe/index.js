@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Fermentables from './Fermentables';
 import Hops from './Hops';
 import formatUnit from '../format-units';
+import { Panel, ListGroup, ListGroupItem } from 'react-bootstrap';
+import './index.css';
 
 const recipes = require('json!../../paleAle.json');
 
@@ -29,17 +31,19 @@ export default class Recipe extends Component {
     const totalWeight = totalFermentableWeight(recipe);
 
     return (
-      <div className="row">
-        <h1>
-          {recipe.name}
-        </h1>
-        <ul className="unstyled">
-          <li> Batch Size: {formatUnit({amount: recipe.batch_size + 'L', major_unit: 'gal', minor_unit: 'floz'})} </li>
-          <li> Boil Size: {formatUnit({amount: recipe.boil_size + 'L', major_unit: 'gal', minor_unit: 'floz'})} </li>
+      <Panel>
+        <h2 className="title">{ recipe.name }</h2>
+        <ListGroup>
+          <ListGroupItem header="Batch Size">
+            {formatUnit({amount: recipe.batch_size + 'L', major_unit: 'gal', minor_unit: 'floz'})}
+          </ListGroupItem>
+          <ListGroupItem header="Boil Size">
+            {formatUnit({amount: recipe.boil_size + 'L', major_unit: 'gal', minor_unit: 'floz'})}
+          </ListGroupItem>
           <Fermentables fermentables={recipe.fermentables} totalWeight={totalWeight} />
           <Hops hops={ recipe.hops } />
-        </ul>
-      </div>
+        </ListGroup>
+      </Panel>
     );
   }
 
