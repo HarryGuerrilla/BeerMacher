@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
+import { ListGroup } from 'react-bootstrap';
 
 export default class RecipeList extends Component {
   constructor({ props }) {
@@ -9,15 +10,17 @@ export default class RecipeList extends Component {
   render() {
     return(
       <div>
-        <ul>
+        <ListGroup vertical block>
         { this.props.recipes.map((recipe, index) => {
           return(
-            <li key={index}>
-              <Link to={ 'recipe/' + index }>{ recipe.name }</Link>
-            </li>
-            );
-         })}
-        </ul>
+            <Link to={ 'recipe/' + index }
+                  className="list-group-item list-group-item-action"
+                  activeClassName="active">
+              { recipe.name }
+            </Link>
+          );
+          })}
+        </ListGroup>
       </div>
     );
   }
