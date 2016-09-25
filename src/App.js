@@ -23,6 +23,7 @@ class App extends Component {
     const dataClass = classNames({
       in: this.state.dataIn,
       collapse: true,
+      'col-sm-12': true,
     });
     return (
       <div>
@@ -40,7 +41,7 @@ class App extends Component {
           <div className="col-sm-8">
             { this.props.children }
           </div>
-          <div className="text-left" >
+          <div className="col-sm-12" >
             <Button onClick={ this.toggleData }>View State</Button>
           </div>
           <div className={dataClass}>
