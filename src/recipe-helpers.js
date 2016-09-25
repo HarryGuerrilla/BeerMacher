@@ -1,0 +1,81 @@
+const tinseth = (og, min) => {
+  let gravityFactor = 1.65 * Math.pow(0.000125, (og -1));
+  let timeFactor = (1 - Math.pow(Math.E, (-0.04 * min))) / 4.15;
+  return gravityFactor * timeFactor;
+}
+
+const toLb = (kilo) => {
+  return kilo * 2.204172052;
+}
+
+const toGal = (liters) => {
+  return liters * 0.264172052;
+}
+
+const helpers = {
+  litersToGal: toGal,
+  kilosToLb: toLb,
+  calculateIBUs: ({hops, og, batch_size}) => {
+    let ibus = 0;
+    hops.reduce((total, hop) => {
+      let w = parseFloat(hop.amount) * 1000;
+      let aa = parseFloat(hop.alpha)/100;
+      let u = tinseth(parseFloat(og), parseFloat(hop.time));
+      let vol = parseFloat(batch_size);
+      ibus = hop.use === "Boil" ? total + (w * aa * u * 1000)/vol : total;
+    });
+    return(ibus);
+  },
+  totalAmount: (ingredient) => {
+    return ingredient.reduce((total, cur) => {
+      return total + parseFloat(cur.amount);
+    });
+  },
+  calcOriginalGravity: ({ efficiency, batch_size, fermentables}) => {
+    let ee = efficiency/100;
+    let volume = toGal(batch_size);
+    let sgp = fermentables.reduce((total, cur) => {
+      return total + ((toLb(parseFloat(cur.amount)))
+          * (46 * (parseFloat(cur.yield) / 100)) * ee)/volume;
+    }, 0);
+    return 1 + sgp/1000;
+  },
+  calcPreBoilGravity: ({og, batch_size, trub_chiller_loss, boil_size}) => {
+    let ppg = og * 1000 - 1000;
+    let gp = ppg * (toGal(batch_size) +
+                    toGal(trub_chiller_loss));
+    return 1 + gp/toGal(boil_size)/1000;
+  },
+  finalGravity: ({ yeasts, og }) => {
+    let amount = yeasts.reduce((total, cur) => {
+      return total + parseFloat(cur.amount);
+    }, 0);
+    let yeastAtt = yeasts.reduce((total, cur) => {
+      return total + (parseFloat(cur.amount) * (parseFloat(cur.attenuation)/100));
+    }, 0);
+
+    let totalAttenuation = yeastAtt/amount;
+    return (((og-1) * (1-totalAttenuation)) + 1);
+  },
+  bitternessRatio: ({ og, ibus }) => {
+    let gp = og * 1000 - 1000;
+    return ibu/gp;
+  },
+  abv: ({ og, fg }) => {
+    return (76.08 * (og-fg)/(1.775-og))*(fg/0.794);
+  },
+  srm: ({ fermentables, batch_size, trub_chiller_loss }) => {
+    let mcu = fermentables.reduce((total,cur) => {
+      if (cur.type === 'Grain') {
+        return total +
+          (toLb(parseFloat(cur.amount)) * parseFloat(cur.color)) /
+          toGal(parseFloat(batch_size) + parseFloat(trub_chiller_loss));
+      } else {
+        return 0;
+      }
+    }, 0);
+    return 1.4922 * (Math.pow(mcu, 0.6859));
+  }
+}
+
+export default helpers;
