@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import { ListGroup } from 'react-bootstrap';
+import { ListGroup, Panel } from 'react-bootstrap';
 
 export default class RecipeList extends Component {
   constructor({ props }) {
@@ -9,7 +9,7 @@ export default class RecipeList extends Component {
 
   render() {
     return(
-      <div>
+      <Panel header="Recipes">
         <ListGroup vertical block>
         { this.props.recipes.map((recipe, index) => {
           return(
@@ -21,7 +21,7 @@ export default class RecipeList extends Component {
           );
           })}
         </ListGroup>
-      </div>
+      </Panel>
     );
   }
 }
