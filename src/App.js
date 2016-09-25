@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 import { Button, Navbar } from 'react-bootstrap';
 import classNames from 'classnames';
 import './App.css';
-import Recipe from './Recipe';
+import RecipeList from './RecipeList';
 
-var PaleAle = require('json!../paleAle.json');
-
-PaleAle = PaleAle.recipes[0];
+const recipes = require('json!../paleAle.json');
 
 class App extends Component {
   constructor(props) {
     super(props);
-    PaleAle.dataIn = false;
-    this.state = PaleAle;
+    this.state = {
+      dataIn: false,
+      recipes: recipes.recipes
+    };
 
     this.toggleData = this.toggleData.bind(this);
   }
@@ -34,7 +34,12 @@ class App extends Component {
           </Navbar.Header>
         </Navbar>
         <div className="container App">
-          <Recipe recipe={this.state} />
+          <div className="col-sm-4">
+            <RecipeList recipes={this.state.recipes} />
+          </div>
+          <div className="col-sm-8">
+            { this.props.children }
+          </div>
           <div className="text-left" >
             <Button onClick={ this.toggleData }>View State</Button>
           </div>
