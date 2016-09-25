@@ -5,8 +5,7 @@ import App from './App';
 import Home from './Home';
 import Recipe from './Recipe'
 import './index.css';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import '../node_modules/bootstrap/dist/css/bootstrap-theme.min.css';
+import './bootstrap/css/bootstrap.min.css';
 
 ReactDOM.render(
   <Router history={ hashHistory }>

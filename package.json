@@ -6,7 +6,6 @@
     "react-scripts": "0.2.0"
   },
   "dependencies": {
-    "bootstrap": "^3.3.7",
     "brauhaus": "^1.1.1",
     "brauhaus-beerxml": "^1.0.0",
     "classnames": "^2.2.5",
