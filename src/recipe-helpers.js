@@ -16,20 +16,18 @@ const helpers = {
   litersToGal: toGal,
   kilosToLb: toLb,
   calculateIBUs: ({hops, og, batch_size}) => {
-    let ibus = 0;
-    hops.reduce((total, hop) => {
+    return hops.reduce((total, hop) => {
       let w = parseFloat(hop.amount) * 1000;
       let aa = parseFloat(hop.alpha)/100;
       let u = tinseth(parseFloat(og), parseFloat(hop.time));
       let vol = parseFloat(batch_size);
-      ibus = hop.use === "Boil" ? total + (w * aa * u * 1000)/vol : total;
-    });
-    return(ibus);
+      return hop.use === "Boil" ? total + (w * aa * u * 1000)/vol : total;
+    }, 0);
   },
   totalAmount: (ingredient) => {
     return ingredient.reduce((total, cur) => {
       return total + parseFloat(cur.amount);
-    });
+    }, 0);
   },
   calcOriginalGravity: ({ efficiency, batch_size, fermentables}) => {
     let ee = efficiency/100;
@@ -42,9 +40,11 @@ const helpers = {
   },
   calcPreBoilGravity: ({og, batch_size, trub_chiller_loss, boil_size}) => {
     let ppg = og * 1000 - 1000;
-    let gp = ppg * (toGal(batch_size) +
-                    toGal(trub_chiller_loss));
-    return 1 + gp/toGal(boil_size)/1000;
+    let gp = ppg * (toGal(parseFloat(batch_size)) +
+                    toGal(parseFloat(trub_chiller_loss)));
+    let bs = toGal(parseFloat(boil_size));
+    let preBoil =  1 + gp/bs/1000;
+    return preBoil;
   },
   finalGravity: ({ yeasts, og }) => {
     let amount = yeasts.reduce((total, cur) => {
@@ -59,7 +59,7 @@ const helpers = {
   },
   bitternessRatio: ({ og, ibus }) => {
     let gp = og * 1000 - 1000;
-    return ibu/gp;
+    return ibus/gp;
   },
   abv: ({ og, fg }) => {
     return (76.08 * (og-fg)/(1.775-og))*(fg/0.794);
