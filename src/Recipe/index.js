@@ -25,61 +25,62 @@ export default class Recipe extends Component {
       trub_chiller_loss: recipe.equipment.trub_chiller_loss,
       boil_size: recipe.boil_size,
       yeasts: recipe.yeasts,
-      display_batch_size: formatUnit({amount: recipe.batch_size + 'L', major_unit: 'gal' }),
-      display_boil_size: formatUnit({amount: recipe.boil_size + 'L', major_unit: 'gal'}),
-      boil_time: Math.round(recipe.boil_time) + 'min',
-      display_efficiency: Math.round(recipe.efficiency) + '%',
+      display_batch_size: formatUnit(recipe.batch_size, { major_unit: 'gal' }),
+      display_boil_size: formatUnit(recipe.boil_size, { major_unit: 'gal'}),
+      boil_time: formatUnit(recipe.boil_time, { major_unit: 'min' }),
+      display_efficiency: formatUnit(recipe.efficiency, { major_unit: '%'}),
       hops: recipe.hops,
     }
   }
 
   og() {
       let g =  tools.calcOriginalGravity(this.data);
-      return Math.round(g * 1000)/1000;
+      return formatUnit(g, { round: 0.001 });
   }
 
   pbOG() {
     this.data.og = this.og();
     let g = tools.calcPreBoilGravity(this.data);
-    return Math.round(g * 1000)/1000;
+    return formatUnit(g, { round: 0.001 });
   }
 
   fg() {
     this.data.og = this.og();
     let g = tools.finalGravity(this.data);
-    return Math.round(g * 1000)/1000;
+    return formatUnit(g, { round: 0.001 });
   }
 
   abv() {
     this.data.fg = this.fg();
     let abv = tools.abv(this.data);
-    return Math.round(abv * 10)/10 + '%';
+    return formatUnit(abv, { major_unit: '%'});
   }
 
   srm() {
     let srm = tools.srm(this.data);
-    return Math.round(srm * 10)/10;
+    return formatUnit(srm, { round: 0.1 });
   }
 
   totalGrains() {
     let w = tools.totalAmount(this.data.fermentables);
-    return formatUnit({amount: w + 'kg', major_unit: 'lb'});
+    return formatUnit(w, { major_unit: 'lb'});
   }
 
   totalHops() {
     let w = tools.totalAmount(this.data.hops);
-    return formatUnit({amount: w + 'kg', major_unit: 'oz' });
+    return formatUnit(w, { major_unit: 'oz' });
   }
 
   bitternessRatio() {
     this.data.ibus = tools.calculateIBUs(this.data);
     let r = tools.bitternessRatio(this.data);
-    return Math.round(r * 100)/100;
+    //    return Math.round(r * 100)/100;
+    return formatUnit(r, { round: 0.01 })
   }
 
   ibus() {
     let ibus = tools.calculateIBUs(this.data);
-    return Math.round(ibus);
+    return formatUnit(ibus, { round: 1 });
   }
 
   render() {
