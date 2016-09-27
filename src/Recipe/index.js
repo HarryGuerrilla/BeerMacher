@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import formatUnit from '../format-units';
-import { Panel, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Panel, ListGroup, ListGroupItem, Table } from 'react-bootstrap';
 import tools from '../recipe-helpers';
 import './index.css';
 
@@ -74,7 +74,6 @@ export default class Recipe extends Component {
   bitternessRatio() {
     this.data.ibus = tools.calculateIBUs(this.data);
     let r = tools.bitternessRatio(this.data);
-    //    return Math.round(r * 100)/100;
     return formatUnit(r, { round: 0.01 })
   }
 
@@ -86,40 +85,76 @@ export default class Recipe extends Component {
   render() {
     const recipe = this.state.recipe;
     return (
-      <Panel className="col-sm-12">
+      <Panel>
         <header>
           <h2 className="title">{ recipe.name }</h2>
           <p>Ver. {recipe.version}</p>
         </header>
-        <div className="row">
-          <div className="col-sm-12">
-            <ListGroup className="col-sm-6">
-              <ListGroupItem header="Batch Size">
-                { this.data.display_batch_size }
-              </ListGroupItem>
-              <ListGroupItem header="Boil Size">
-                { this.data.display_boil_size }
-              </ListGroupItem>
-              <ListGroupItem header="Boil Time">
-                { this.data.boil_time }
-              </ListGroupItem>
-              <ListGroupItem header="Estimated Efficiency">
-                { this.data.display_efficiency }
-              </ListGroupItem>
-            </ListGroup>
-            <ListGroup className="col-sm-6">
-              <ListGroupItem header="Pre-Boil Gravity">{ this.pbOG() }</ListGroupItem>
-              <ListGroupItem header="Original Gravity">{ this.og() }</ListGroupItem>
-              <ListGroupItem header="Final Gravity">{ this.fg() }</ListGroupItem>
-              <ListGroupItem header="ABV">{ this.abv() }</ListGroupItem>
-              <ListGroupItem header="SRM">{ this.srm() }</ListGroupItem>
-              <ListGroupItem header="Total Grains">{ this.totalGrains() }</ListGroupItem>
-              <ListGroupItem header="Total Hops">{ this.totalHops() }</ListGroupItem>
-              <ListGroupItem header="Bitterness Ratio">{ this.bitternessRatio() }</ListGroupItem>
-              <ListGroupItem header="IBUs">{ this.ibus() }</ListGroupItem>
-            </ListGroup>
-          </div>
-        </div>
+        <Panel header="Style Characteristics">
+          <h3>{ this.state.recipe.style.name }</h3>
+          <Table condensed bordered>
+            <tbody>
+              <tr>
+                <th>Original Gravity:</th>
+                <td>{ this.og() }</td>
+              </tr>
+              <tr>
+                <th>Final Gravity:</th>
+                <td>{ this.fg() }</td>
+              </tr>
+              <tr>
+                <th>ABV:</th>
+                <td>{ this.abv() }</td>
+              </tr>
+              <tr>
+                <th>IBUs:</th>
+                <td>{ this.ibus() }</td>
+              </tr>
+              <tr>
+                <th>Bitterness Ratio:</th>
+                <td>{ this.bitternessRatio() }</td>
+              </tr>
+              <tr>
+                <th>SRM:</th>
+                <td>{ this.srm() }</td>
+              </tr>
+            </tbody>
+          </Table>
+        </Panel>
+        <Panel header="Batch Info">
+          <Table condensed bordered>
+            <tbody>
+              <tr>
+                <th>Estimated Efficiency:</th>
+                <td>{ this.data.display_efficiency }</td>
+              </tr>
+              <tr>
+                <th>Batch Size:</th>
+                <td>{ this.data.display_batch_size }</td>
+              </tr>
+              <tr>
+                <th>Boil Size:</th>
+                <td>{ this.data.display_boil_size }</td>
+              </tr>
+              <tr>
+                <th>Pre-Boil Gravity:</th>
+                <td>{ this.pbOG() }</td>
+              </tr>
+              <tr>
+                <th>Boil Time:</th>
+                <td>{ this.data.boil_time }</td>
+              </tr>
+              <tr>
+                <th>Total Grains:</th>
+                <td>{ this.totalGrains() }</td>
+              </tr>
+              <tr>
+                <th>Total Hops:</th>
+                <td>{ this.totalHops() }</td>
+              </tr>
+            </tbody>
+          </Table>
+        </Panel>
       </Panel>
     );
   }
