@@ -4,7 +4,7 @@ import { Panel, ListGroup, ListGroupItem, Table } from 'react-bootstrap';
 import tools from '../recipe-helpers';
 import './index.css';
 
-const recipes = require('json!../../paleAle.json');
+const recipes = require('../paleAle.json');
 
 export default class Recipe extends Component {
 

@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import './App.css';
 import RecipeList from './RecipeList';
 
-const recipes = require('json!../paleAle.json');
+const recipes = require('./paleAle.json');
 
 class App extends Component {
   constructor(props) {
