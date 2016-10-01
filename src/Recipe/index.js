@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import formatUnit from '../format-units';
-import { Panel, ListGroup, ListGroupItem, Table } from 'react-bootstrap';
+import { Panel, Table } from 'react-bootstrap';
 import tools from '../recipe-helpers';
 import './index.css';
 
@@ -16,107 +16,112 @@ export default class Recipe extends Component {
     }
   }
 
-  componentWillMount(props) {
-    let recipe = this.state.recipe;
-    this.data = {
-      efficiency: recipe.efficiency,
-      batch_size: recipe.batch_size,
-      fermentables: recipe.fermentables,
-      trub_chiller_loss: recipe.equipment.trub_chiller_loss,
-      boil_size: recipe.boil_size,
-      yeasts: recipe.yeasts,
-      display_batch_size: formatUnit(recipe.batch_size, { major_unit: 'gal' }),
-      display_boil_size: formatUnit(recipe.boil_size, { major_unit: 'gal'}),
-      boil_time: formatUnit(recipe.boil_time, { major_unit: 'min' }),
-      display_efficiency: formatUnit(recipe.efficiency, { major_unit: '%'}),
-      hops: recipe.hops,
-    }
-  }
-
-  og() {
-      let g =  tools.calcOriginalGravity(this.data);
+  og(data) {
+      let g =  tools.calcOriginalGravity(data);
       return formatUnit(g, { round: 0.001 });
   }
 
-  pbOG() {
-    this.data.og = this.og();
-    let g = tools.calcPreBoilGravity(this.data);
+  pbOG(data) {
+    data.og = tools.calcOriginalGravity(data);
+    data.trub_chiller_loss = data.equipment.trub_chiller_loss;
+    let g = tools.calcPreBoilGravity(data);
     return formatUnit(g, { round: 0.001 });
   }
 
-  fg() {
-    this.data.og = this.og();
-    let g = tools.finalGravity(this.data);
+  fg(data) {
+    data.og = this.og(data);
+    let g = tools.finalGravity(data);
     return formatUnit(g, { round: 0.001 });
   }
 
-  abv() {
-    this.data.fg = this.fg();
-    let abv = tools.abv(this.data);
+  abv(data) {
+    data.fg = this.fg(data);
+    let abv = tools.abv(data);
     return formatUnit(abv, { major_unit: '%'});
   }
 
-  srm() {
-    let srm = tools.srm(this.data);
+  srm(data) {
+    let srm = tools.srm(data);
     return formatUnit(srm, { round: 0.1 });
   }
 
-  totalGrains() {
-    let w = tools.totalAmount(this.data.fermentables);
+  totalGrains(data) {
+    let w = tools.totalAmount(data.fermentables);
     return formatUnit(w, { major_unit: 'lb'});
   }
 
-  totalHops() {
-    let w = tools.totalAmount(this.data.hops);
+  totalHops(data) {
+    let w = tools.totalAmount(data.hops);
     return formatUnit(w, { major_unit: 'oz' });
   }
 
-  bitternessRatio() {
-    this.data.ibus = tools.calculateIBUs(this.data);
-    let r = tools.bitternessRatio(this.data);
-    return formatUnit(r, { round: 0.01 })
+  bitternessRatio(data) {
+    data.og = tools.calcOriginalGravity(data);
+    data.ibus = tools.calculateIBUs(data);
+    let r = tools.bitternessRatio(data);
+    return formatUnit(r, { round: 0.01 });
   }
 
-  ibus() {
-    let ibus = tools.calculateIBUs(this.data);
+  ibus(data) {
+    let ibus = tools.calculateIBUs(data);
     return formatUnit(ibus, { round: 1 });
   }
 
   render() {
-    const recipe = this.state.recipe;
+    const name = this.state.recipe.name;
+    const version = this.state.recipe.version;
+    const style = this.state.recipe.style.name;
+    const og = this.og(this.state.recipe);
+    const fg = this.fg(this.state.recipe);
+    const pbOG = this.pbOG(this.state.recipe);
+    const abv = this.abv(this.state.recipe);
+    const srm = this.srm(this.state.recipe);
+    const totalGrains = this.totalGrains(this.state.recipe);
+    const totalHops = this.totalHops(this.state.recipe);
+    const bitternessRatio = this.bitternessRatio(this.state.recipe);
+    const ibus = this.ibus(this.state.recipe);
+    const batch_size = formatUnit(this.state.recipe.batch_size,
+                                  { major_unit: 'gal' });
+    const boil_size = formatUnit(this.state.recipe.boil_size,
+                                 { major_unit: 'gal'});
+    const boil_time = formatUnit(this.state.recipe.boil_time,
+                                 { major_unit: 'min' });
+    const efficiency = formatUnit(this.state.recipe.efficiency,
+                                  { major_unit: '%'});
+
     return (
       <Panel>
         <header>
-          <h2 className="title">{ recipe.name }</h2>
-          <p>Ver. {recipe.version}</p>
+          <h2 className="title">{ name }</h2>
+          <p>Ver. { version }</p>
         </header>
         <Panel header="Style Characteristics">
-          <h3>{ this.state.recipe.style.name }</h3>
+          <h3>{ style }</h3>
           <Table condensed bordered>
             <tbody>
               <tr>
                 <th>Original Gravity:</th>
-                <td>{ this.og() }</td>
+                <td>{ og }</td>
               </tr>
               <tr>
                 <th>Final Gravity:</th>
-                <td>{ this.fg() }</td>
+                <td>{ fg }</td>
               </tr>
               <tr>
                 <th>ABV:</th>
-                <td>{ this.abv() }</td>
+                <td>{ abv }</td>
               </tr>
               <tr>
                 <th>IBUs:</th>
-                <td>{ this.ibus() }</td>
+                <td>{ ibus }</td>
               </tr>
               <tr>
                 <th>Bitterness Ratio:</th>
-                <td>{ this.bitternessRatio() }</td>
+                <td>{ bitternessRatio }</td>
               </tr>
               <tr>
                 <th>SRM:</th>
-                <td>{ this.srm() }</td>
+                <td>{ srm }</td>
               </tr>
             </tbody>
           </Table>
@@ -126,31 +131,31 @@ export default class Recipe extends Component {
             <tbody>
               <tr>
                 <th>Estimated Efficiency:</th>
-                <td>{ this.data.display_efficiency }</td>
+                <td>{ efficiency }</td>
               </tr>
               <tr>
                 <th>Batch Size:</th>
-                <td>{ this.data.display_batch_size }</td>
+                <td>{ batch_size }</td>
               </tr>
               <tr>
                 <th>Boil Size:</th>
-                <td>{ this.data.display_boil_size }</td>
+                <td>{ boil_size }</td>
               </tr>
               <tr>
                 <th>Pre-Boil Gravity:</th>
-                <td>{ this.pbOG() }</td>
+                <td>{ pbOG }</td>
               </tr>
               <tr>
                 <th>Boil Time:</th>
-                <td>{ this.data.boil_time }</td>
+                <td>{ boil_time }</td>
               </tr>
               <tr>
                 <th>Total Grains:</th>
-                <td>{ this.totalGrains() }</td>
+                <td>{ totalGrains }</td>
               </tr>
               <tr>
                 <th>Total Hops:</th>
-                <td>{ this.totalHops() }</td>
+                <td>{ totalHops }</td>
               </tr>
             </tbody>
           </Table>
