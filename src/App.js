@@ -27,7 +27,7 @@ class App extends Component {
     });
     return (
       <div>
-        <Navbar role="navigation" fixedTop="true">
+        <Navbar role="navigation" fixedTop={ true }>
           <Navbar.Header>
             <Navbar.Brand>
               <a href="#">Recipes</a>

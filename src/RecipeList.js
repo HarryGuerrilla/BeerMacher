@@ -15,7 +15,8 @@ export default class RecipeList extends Component {
           return(
             <Link to={ 'recipe/' + index }
                   className="list-group-item list-group-item-action"
-                  activeClassName="active">
+                  activeClassName="active"
+                  key={ index }>
               { recipe.name }
             </Link>
           );
