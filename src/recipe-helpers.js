@@ -75,6 +75,14 @@ const helpers = {
       }
     }, 0);
     return 1.4922 * (Math.pow(mcu, 0.6859));
+  },
+  boilVolume: ({ batch_size, equipment, boil_time}) => {
+    let bs = parseFloat(batch_size);
+    let top_up = parseFloat(equipment.top_up_water);
+    let trub = parseFloat(equipment.trub_chiller_loss);
+    let evap = parseFloat(equipment.evap_rate)/100;
+    let time = parseFloat(boil_time)/60;
+    return (bs - top_up + trub) * (1 + time * evap);
   }
 }
 

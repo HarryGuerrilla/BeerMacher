@@ -6,7 +6,7 @@ const roundDown = () => {
   };
 };
 
-export default ( amount, { major_unit, minor_unit, round }) => {
+export default ( amount, { major_unit, minor_unit, round, save }) => {
   let default_unit = '';
   let v = parseFloat(amount);
 
@@ -39,6 +39,11 @@ export default ( amount, { major_unit, minor_unit, round }) => {
     if (major_unit === '%') {
       return Math.round(v) + '%';
     }
+
+  if (save) {
+    let qty = (new Qty(v, major_unit)).to(default_unit);
+    return qty.scalar;
+  }
 
   if (!default_unit) {
     if (round > 0) {

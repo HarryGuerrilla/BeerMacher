@@ -1,18 +1,22 @@
 import React, { Component } from 'react';
 import formatUnit from '../format-units';
-import { Panel, Table } from 'react-bootstrap';
+import { Panel, Table, Button, Glyphicon } from 'react-bootstrap';
 import tools from '../recipe-helpers';
 import './index.css';
 
 const recipes = require('../paleAle.json');
 
-export default class Recipe extends Component {
+class Recipe extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
       recipe: recipes.recipes[this.props.params.id],
+      edit: {
+        field: '',
+      },
+      batch_size_tmp: '',
     }
   }
 
@@ -24,6 +28,7 @@ export default class Recipe extends Component {
   pbOG(data) {
     data.og = tools.calcOriginalGravity(data);
     data.trub_chiller_loss = data.equipment.trub_chiller_loss;
+    data.boil_size = tools.boilVolume(data);
     let g = tools.calcPreBoilGravity(data);
     return formatUnit(g, { round: 0.001 });
   }
@@ -67,6 +72,63 @@ export default class Recipe extends Component {
     return formatUnit(ibus, { round: 1 });
   }
 
+  boilSize(data) {
+    let vol = tools.boilVolume(data);
+    return formatUnit(vol, { major_unit: 'gal' });
+  }
+
+  editField(field) {
+    this.setState({ edit: { field: field }});
+  }
+
+  onNameChange(event) {
+    let recipe = this.state.recipe;
+    recipe.name = event.target.value;
+    this.setState({ edit: { field: 'name' },
+                    recipe: recipe });
+  }
+
+  saveValue(event) {
+    let recipe = this.state.recipe;
+    if (event.key === "Enter") {
+      this.setState({ edit: { field: ''},
+                      recipe: recipe })
+    }
+  }
+
+  saveValueOnBlur(event) {
+    let recipe = this.state.recipe;
+    this.setState({ edit: { field: ''},
+                    recipe: recipe });
+  }
+
+  onBatchChange(event) {
+    this.setState({ batch_size_tmp: event.target.value });
+  }
+
+  fmtBoilSizeForSave(bs) {
+    bs = bs.split(' ');
+    bs = formatUnit(bs[0], { save: true, major_unit: bs[1] || 'gal' });
+    return bs;
+  }
+
+  saveBatchValue(event) {
+    let recipe = this.state.recipe;
+    if (event.key === "Enter") {
+      let bs = this.state.batch_size_tmp || formatUnit(recipe.batch_size, { major_unit: 'gal'});
+      recipe.batch_size = this.fmtBoilSizeForSave(bs);
+      recipe.boil_size = tools.boilVolume(recipe);
+      this.setState({ edit: { field: '' },
+                      recipe: recipe,
+                      batch_size_tmp: '',
+                    });
+    }
+  }
+
+  saveBatchValueOnBlur() {
+
+  }
+
   render() {
     const name = this.state.recipe.name;
     const version = this.state.recipe.version;
@@ -82,17 +144,61 @@ export default class Recipe extends Component {
     const ibus = this.ibus(this.state.recipe);
     const batch_size = formatUnit(this.state.recipe.batch_size,
                                   { major_unit: 'gal' });
-    const boil_size = formatUnit(this.state.recipe.boil_size,
-                                 { major_unit: 'gal'});
+    const boil_size = this.boilSize(this.state.recipe);
     const boil_time = formatUnit(this.state.recipe.boil_time,
                                  { major_unit: 'min' });
     const efficiency = formatUnit(this.state.recipe.efficiency,
                                   { major_unit: '%'});
 
+    const recipeName = () => {
+      if (this.state.edit.field === 'name') {
+        return(
+          <h2 className="title">
+            <input value={ name }
+                   onKeyPress={this.saveValue.bind(this)}
+                   onChange={ this.onNameChange.bind(this) }
+                   onBlur={ this.saveValueOnBlur.bind(this) }/>
+          </h2>
+        );
+      } else {
+        return(
+          <h2 className="title">
+            { name }
+            <Button bsStyle="link"
+                    onClick={ this.editField.bind(this, 'name') }>
+              <Glyphicon glyph="pencil" /></Button>
+          </h2>
+        );
+      }
+    }
+
+    const batchSize = () => {
+      let bs = this.state.batch_size_tmp || batch_size
+      if (this.state.edit.field === 'batch_size') {
+        return(
+          <input value={ bs }
+                 onChange={ this.onBatchChange.bind(this) }
+                 onKeyPress={ this.saveBatchValue.bind(this) }
+                 onBlur={ this.saveBatchValueOnBlur.bind(this) }/>
+        );
+      } else {
+        return(
+          <div>
+            { batch_size }
+            <Button bsStyle="link"
+                    bsSize="xsmall"
+                    onClick={ this.editField.bind(this, 'batch_size') }>
+              <Glyphicon glyph="pencil" />
+            </Button>
+          </div>
+        );
+      }
+    }
+
     return (
       <Panel>
         <header>
-          <h2 className="title">{ name }</h2>
+          { recipeName() }
           <p>Ver. { version }</p>
         </header>
         <Panel header="Style Characteristics">
@@ -135,7 +241,7 @@ export default class Recipe extends Component {
               </tr>
               <tr>
                 <th>Batch Size:</th>
-                <td>{ batch_size }</td>
+                <td>{ batchSize() }</td>
               </tr>
               <tr>
                 <th>Boil Size:</th>
@@ -165,3 +271,5 @@ export default class Recipe extends Component {
   }
 
 };
+
+export default Recipe;
