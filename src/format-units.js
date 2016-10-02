@@ -46,8 +46,11 @@ export default ( amount, { major_unit, minor_unit, round, save }) => {
   }
 
   if (!default_unit) {
+    let dc;
     if (round > 0) {
-      return Math.round(v * (1/round))/(1/round);
+      v = Math.round(v * (1/round))/(1/round);
+      dc = round < 1 ? round.toString().split('.')[1].length : 0;
+      return v.toFixed(dc);
     } else {
       return v;
     }

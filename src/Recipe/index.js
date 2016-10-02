@@ -140,7 +140,6 @@ class Recipe extends Component {
   render() {
     const name = this.state.recipe.name;
     const version = this.state.recipe.version;
-    const style = this.state.recipe.style.name;
     const og = this.og(this.state.recipe);
     const fg = this.fg(this.state.recipe);
     const pbOG = this.pbOG(this.state.recipe);
@@ -157,6 +156,19 @@ class Recipe extends Component {
                                  { major_unit: 'min' });
     const efficiency = formatUnit(this.state.recipe.efficiency,
                                   { major_unit: '%'});
+    const style = {
+      name: this.state.recipe.style.name,
+      og_min: formatUnit(this.state.recipe.style.og_min, { round: 0.001 }),
+      og_max: formatUnit(this.state.recipe.style.og_max, { round: 0.001 }),
+      fg_min: formatUnit(this.state.recipe.style.fg_min, { round: 0.001 }),
+      fg_max: formatUnit(this.state.recipe.style.fg_max, { round: 0.001 }),
+      ibu_min: formatUnit(this.state.recipe.style.ibu_min, { round: 1 }),
+      ibu_max: formatUnit(this.state.recipe.style.ibu_max, { round: 1 }),
+      color_min: formatUnit(this.state.recipe.style.color_min, { round: 0.1 }),
+      color_max: formatUnit(this.state.recipe.style.color_max, { round: 0.1 }),
+      abv_min: formatUnit(this.state.recipe.style.abv_min, { major_unit: '%' }),
+      abv_max: formatUnit(this.state.recipe.style.abv_max, { major_unit: '%' }),
+    }
 
     const recipeName = () => {
       if (this.state.edit.field === 'name') {
@@ -212,32 +224,45 @@ class Recipe extends Component {
           <p>Ver. { version }</p>
         </header>
         <Panel header="Style Characteristics">
-          <h3>{ style }</h3>
+          <h3>{ style.name }</h3>
           <Table condensed bordered>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Recipe</th>
+                <th>Style</th>
+              </tr>
+            </thead>
             <tbody>
               <tr>
                 <th>Original Gravity:</th>
                 <td>{ og }</td>
+                <td>{ style.og_min } - { style.og_max }</td>
               </tr>
               <tr>
                 <th>Final Gravity:</th>
                 <td>{ fg }</td>
+                <td>{ style.fg_min } - { style.fg_max }</td>
               </tr>
               <tr>
                 <th>ABV:</th>
                 <td>{ abv }</td>
+                <td>{ style.abv_min } - { style.abv_max }</td>
               </tr>
               <tr>
                 <th>IBUs:</th>
                 <td>{ ibus }</td>
+                <td>{ style.ibu_min } - { style.ibu_max }</td>
               </tr>
               <tr>
                 <th>Bitterness Ratio:</th>
                 <td>{ bitternessRatio }</td>
+                <td></td>
               </tr>
               <tr>
                 <th>SRM:</th>
                 <td>{ srm }</td>
+                <td>{ style.color_min } - { style.color_max }</td>
               </tr>
             </tbody>
           </Table>
