@@ -10,7 +10,7 @@ export default class RecipeList extends Component {
   render() {
     return(
       <Panel header="Recipes">
-        <ListGroup vertical block>
+        <ListGroup>
         { this.props.recipes.map((recipe, index) => {
           return(
             <Link to={ 'recipe/' + index }
