@@ -126,7 +126,15 @@ class Recipe extends Component {
   }
 
   saveBatchValueOnBlur() {
-
+    let recipe = this.state.recipe;
+    let bs = this.state.batch_size_tmp ||
+             formatUnit(recipe.batch_size, { major_unit: 'gal'});
+    recipe.batch_size = this.fmtBoilSizeForSave(bs);
+    recipe.boil_size = tools.boilVolume(recipe);
+    this.setState({ edit: { field: '' },
+                    recipe: recipe,
+                    batch_size_tmp: '',
+    });
   }
 
   render() {
@@ -157,7 +165,8 @@ class Recipe extends Component {
             <input value={ name }
                    onKeyPress={this.saveValue.bind(this)}
                    onChange={ this.onNameChange.bind(this) }
-                   onBlur={ this.saveValueOnBlur.bind(this) }/>
+                   onBlur={ this.saveValueOnBlur.bind(this) }
+                   autoFocus />
           </h2>
         );
       } else {
@@ -179,7 +188,8 @@ class Recipe extends Component {
           <input value={ bs }
                  onChange={ this.onBatchChange.bind(this) }
                  onKeyPress={ this.saveBatchValue.bind(this) }
-                 onBlur={ this.saveBatchValueOnBlur.bind(this) }/>
+                 onBlur={ this.saveBatchValueOnBlur.bind(this)}
+                 autoFocus />
         );
       } else {
         return(
