@@ -38,10 +38,10 @@ const helpers = {
     }, 0);
     return 1 + sgp/1000;
   },
-  calcPreBoilGravity: ({og, batch_size, trub_chiller_loss, boil_size}) => {
+  calcPreBoilGravity: ({og, batch_size, equipment, boil_size}) => {
     let ppg = og * 1000 - 1000;
     let gp = ppg * (toGal(parseFloat(batch_size)) +
-                    toGal(parseFloat(trub_chiller_loss)));
+                    toGal(parseFloat(equipment.trub_chiller_loss)));
     let bs = toGal(parseFloat(boil_size));
     let preBoil =  1 + gp/bs/1000;
     return preBoil;
@@ -64,12 +64,12 @@ const helpers = {
   abv: ({ og, fg }) => {
     return (76.08 * (og-fg)/(1.775-og))*(fg/0.794);
   },
-  srm: ({ fermentables, batch_size, trub_chiller_loss }) => {
+  srm: ({ fermentables, batch_size, equipment }) => {
     let mcu = fermentables.reduce((total,cur) => {
       if (cur.type === 'Grain') {
         return total +
           (toLb(parseFloat(cur.amount)) * parseFloat(cur.color)) /
-          toGal(parseFloat(batch_size) + parseFloat(trub_chiller_loss));
+          toGal(parseFloat(batch_size) + parseFloat(equipment.trub_chiller_loss));
       } else {
         return 0;
       }

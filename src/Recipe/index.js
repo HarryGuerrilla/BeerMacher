@@ -20,61 +20,123 @@ class Recipe extends Component {
     }
   }
 
-  og(data) {
-      let g =  tools.calcOriginalGravity(data);
+  get og() {
+      let g =  tools.calcOriginalGravity(this.state.recipe);
       return formatUnit(g, { round: 0.001 });
   }
 
-  pbOG(data) {
-    data.og = tools.calcOriginalGravity(data);
-    data.trub_chiller_loss = data.equipment.trub_chiller_loss;
-    data.boil_size = tools.boilVolume(data);
+  get pbOG() {
+    let data = {
+      og: this.og,
+      equipment: this.state.recipe.equipment,
+      boil_size: this.boil_size,
+      batch_size: this.state.recipe.batch_size
+    }
     let g = tools.calcPreBoilGravity(data);
     return formatUnit(g, { round: 0.001 });
   }
 
-  fg(data) {
-    data.og = this.og(data);
+  get fg() {
+    let data = {
+      yeasts: this.state.recipe.yeasts,
+      og: this.og
+    }
     let g = tools.finalGravity(data);
     return formatUnit(g, { round: 0.001 });
   }
 
-  abv(data) {
-    data.fg = this.fg(data);
+  get abv() {
+    let data = {
+      og: this.og,
+      fg: this.fg
+    }
     let abv = tools.abv(data);
     return formatUnit(abv, { major_unit: '%'});
   }
 
-  srm(data) {
+  get srm() {
+    let data = {
+      fermentables: this.state.recipe.fermentables,
+      batch_size: this.state.recipe.batch_size,
+      equipment: this.state.recipe.equipment
+    }
     let srm = tools.srm(data);
     return formatUnit(srm, { round: 0.1 });
   }
 
-  totalGrains(data) {
-    let w = tools.totalAmount(data.fermentables);
+  get totalGrains() {
+    let w = tools.totalAmount(this.state.recipe.fermentables);
     return formatUnit(w, { major_unit: 'lb'});
   }
 
-  totalHops(data) {
-    let w = tools.totalAmount(data.hops);
+  get totalHops() {
+    let w = tools.totalAmount(this.state.recipe.hops);
     return formatUnit(w, { major_unit: 'oz' });
   }
 
-  bitternessRatio(data) {
-    data.og = tools.calcOriginalGravity(data);
-    data.ibus = tools.calculateIBUs(data);
+  get bitternessRatio() {
+    let data = {
+      og: this.og,
+      ibus: this.ibus
+    }
     let r = tools.bitternessRatio(data);
     return formatUnit(r, { round: 0.01 });
   }
 
-  ibus(data) {
+  get ibus() {
+    let data = {
+      hops: this.state.recipe.hops,
+      og: this.og,
+      batch_size: this.state.recipe.batch_size
+    }
     let ibus = tools.calculateIBUs(data);
     return formatUnit(ibus, { round: 1 });
   }
 
-  boilSize(data) {
+  get boilSize() {
+    let data = {
+      batch_size: this.state.recipe.batch_size,
+      equipment: this.state.recipe.equipment,
+      boil_time: this.state.recipe.boil_time
+    }
     let vol = tools.boilVolume(data);
     return formatUnit(vol, { major_unit: 'gal' });
+  }
+
+  get name() {
+    return this.state.recipe.name;
+  }
+
+  get version() {
+    return this.state.recipe.version;
+  }
+
+  get batch_size() {
+    return formatUnit(this.state.recipe.batch_size, { major_unit: 'gal' })
+  }
+
+  get boil_time() {
+    return formatUnit(this.state.recipe.boil_time, { major_unit: 'min' })
+  }
+
+  get efficiency() {
+    return formatUnit(this.state.recipe.efficiency, { major_unit: '%' })
+  }
+
+  get style() {
+    return {
+      name: this.state.recipe.style.name,
+      og_min: formatUnit(this.state.recipe.style.og_min, { round: 0.001 }),
+      og_max: formatUnit(this.state.recipe.style.og_max, { round: 0.001 }),
+      fg_min: formatUnit(this.state.recipe.style.fg_min, { round: 0.001 }),
+      fg_max: formatUnit(this.state.recipe.style.fg_max, { round: 0.001 }),
+      ibu_min: formatUnit(this.state.recipe.style.ibu_min, { round: 1 }),
+      ibu_max: formatUnit(this.state.recipe.style.ibu_max, { round: 1 }),
+      color_min: formatUnit(this.state.recipe.style.color_min, { round: 0.1 }),
+      color_max: formatUnit(this.state.recipe.style.color_max, { round: 0.1 }),
+      abv_min: formatUnit(this.state.recipe.style.abv_min, { major_unit: '%' }),
+      abv_max: formatUnit(this.state.recipe.style.abv_max, { major_unit: '%' }),
+    }
   }
 
   editField(field) {
@@ -115,7 +177,8 @@ class Recipe extends Component {
   saveBatchValue(event) {
     let recipe = this.state.recipe;
     if (event.key === "Enter") {
-      let bs = this.state.batch_size_tmp || formatUnit(recipe.batch_size, { major_unit: 'gal'});
+      let bs = this.state.batch_size_tmp ||
+               formatUnit(recipe.batch_size, { major_unit: 'gal'});
       recipe.batch_size = this.fmtBoilSizeForSave(bs);
       recipe.boil_size = tools.boilVolume(recipe);
       this.setState({ edit: { field: '' },
@@ -138,49 +201,17 @@ class Recipe extends Component {
   }
 
   render() {
-    const name = this.state.recipe.name;
-    const version = this.state.recipe.version;
-    const og = this.og(this.state.recipe);
-    const fg = this.fg(this.state.recipe);
-    const pbOG = this.pbOG(this.state.recipe);
-    const abv = this.abv(this.state.recipe);
-    const srm = this.srm(this.state.recipe);
-    const totalGrains = this.totalGrains(this.state.recipe);
-    const totalHops = this.totalHops(this.state.recipe);
-    const bitternessRatio = this.bitternessRatio(this.state.recipe);
-    const ibus = this.ibus(this.state.recipe);
-    const batch_size = formatUnit(this.state.recipe.batch_size,
-                                  { major_unit: 'gal' });
-    const boil_size = this.boilSize(this.state.recipe);
-    const boil_time = formatUnit(this.state.recipe.boil_time,
-                                 { major_unit: 'min' });
-    const efficiency = formatUnit(this.state.recipe.efficiency,
-                                  { major_unit: '%'});
-    const style = {
-      name: this.state.recipe.style.name,
-      og_min: formatUnit(this.state.recipe.style.og_min, { round: 0.001 }),
-      og_max: formatUnit(this.state.recipe.style.og_max, { round: 0.001 }),
-      fg_min: formatUnit(this.state.recipe.style.fg_min, { round: 0.001 }),
-      fg_max: formatUnit(this.state.recipe.style.fg_max, { round: 0.001 }),
-      ibu_min: formatUnit(this.state.recipe.style.ibu_min, { round: 1 }),
-      ibu_max: formatUnit(this.state.recipe.style.ibu_max, { round: 1 }),
-      color_min: formatUnit(this.state.recipe.style.color_min, { round: 0.1 }),
-      color_max: formatUnit(this.state.recipe.style.color_max, { round: 0.1 }),
-      abv_min: formatUnit(this.state.recipe.style.abv_min, { major_unit: '%' }),
-      abv_max: formatUnit(this.state.recipe.style.abv_max, { major_unit: '%' }),
-    }
-
     const recipeName = () => {
       return(
         <h2 className="title">
           { this.state.edit.field === 'name' ? (
-              <input value={ name }
+              <input value={ this.name }
                      onKeyPress={this.saveValue.bind(this)}
                      onChange={ this.onNameChange.bind(this) }
                      onBlur={ this.saveValueOnBlur.bind(this) }
                      autoFocus />
           ) : (
-            <span> { name }
+            <span> { this.name }
               <Button bsStyle="link"
                       onClick={ this.editField.bind(this, 'name') }>
                 <Glyphicon glyph="pencil" /></Button>
@@ -191,7 +222,7 @@ class Recipe extends Component {
     }
 
     const batchSize = () => {
-      let bs = this.state.batch_size_tmp || batch_size;
+      let bs = this.state.batch_size_tmp || this.batch_size;
       return(
         <div>
         { this.state.edit.field === 'batch_size' ? (
@@ -202,7 +233,7 @@ class Recipe extends Component {
                  autoFocus />
         ) : (
           <div>
-            { batch_size }
+            { this.batch_size }
             <Button bsStyle="link"
                     bsSize="xsmall"
                     onClick={ this.editField.bind(this, 'batch_size') }>
@@ -218,10 +249,10 @@ class Recipe extends Component {
       <Panel>
         <header>
           { recipeName() }
-          <p>Ver. { version }</p>
+          <p>Ver. { this.version }</p>
         </header>
         <Panel header="Style Characteristics">
-          <h3>{ style.name }</h3>
+          <h3>{ this.style.name }</h3>
           <Table condensed bordered>
             <thead>
               <tr>
@@ -233,33 +264,33 @@ class Recipe extends Component {
             <tbody>
               <tr>
                 <th>Original Gravity:</th>
-                <td>{ og }</td>
-                <td>{ style.og_min } - { style.og_max }</td>
+                <td>{ this.og }</td>
+                <td>{ this.style.og_min } - { this.style.og_max }</td>
               </tr>
               <tr>
                 <th>Final Gravity:</th>
-                <td>{ fg }</td>
-                <td>{ style.fg_min } - { style.fg_max }</td>
+                <td>{ this.fg }</td>
+                <td>{ this.style.fg_min } - { this.style.fg_max }</td>
               </tr>
               <tr>
                 <th>ABV:</th>
-                <td>{ abv }</td>
-                <td>{ style.abv_min } - { style.abv_max }</td>
+                <td>{ this.abv }</td>
+                <td>{ this.style.abv_min } - { this.style.abv_max }</td>
               </tr>
               <tr>
                 <th>IBUs:</th>
-                <td>{ ibus }</td>
-                <td>{ style.ibu_min } - { style.ibu_max }</td>
+                <td>{ this.ibus }</td>
+                <td>{ this.style.ibu_min } - { this.style.ibu_max }</td>
               </tr>
               <tr>
                 <th>Bitterness Ratio:</th>
-                <td>{ bitternessRatio }</td>
+                <td>{ this.bitternessRatio }</td>
                 <td></td>
               </tr>
               <tr>
                 <th>SRM:</th>
-                <td>{ srm }</td>
-                <td>{ style.color_min } - { style.color_max }</td>
+                <td>{ this.srm }</td>
+                <td>{ this.style.color_min } - { this.style.color_max }</td>
               </tr>
             </tbody>
           </Table>
@@ -269,7 +300,7 @@ class Recipe extends Component {
             <tbody>
               <tr>
                 <th>Estimated Efficiency:</th>
-                <td>{ efficiency }</td>
+                <td>{ this.efficiency }</td>
               </tr>
               <tr>
                 <th>Batch Size:</th>
@@ -277,23 +308,23 @@ class Recipe extends Component {
               </tr>
               <tr>
                 <th>Boil Size:</th>
-                <td>{ boil_size }</td>
+                <td>{ this.boil_size }</td>
               </tr>
               <tr>
                 <th>Pre-Boil Gravity:</th>
-                <td>{ pbOG }</td>
+                <td>{ this.pbOG }</td>
               </tr>
               <tr>
                 <th>Boil Time:</th>
-                <td>{ boil_time }</td>
+                <td>{ this.boil_time }</td>
               </tr>
               <tr>
                 <th>Total Grains:</th>
-                <td>{ totalGrains }</td>
+                <td>{ this.totalGrains }</td>
               </tr>
               <tr>
                 <th>Total Hops:</th>
-                <td>{ totalHops }</td>
+                <td>{ this.totalHops }</td>
               </tr>
             </tbody>
           </Table>
