@@ -171,40 +171,36 @@ class Recipe extends Component {
     }
 
     const recipeName = () => {
-      if (this.state.edit.field === 'name') {
-        return(
-          <h2 className="title">
-            <input value={ name }
-                   onKeyPress={this.saveValue.bind(this)}
-                   onChange={ this.onNameChange.bind(this) }
-                   onBlur={ this.saveValueOnBlur.bind(this) }
-                   autoFocus />
-          </h2>
-        );
-      } else {
-        return(
-          <h2 className="title">
-            { name }
-            <Button bsStyle="link"
-                    onClick={ this.editField.bind(this, 'name') }>
-              <Glyphicon glyph="pencil" /></Button>
-          </h2>
-        );
-      }
+      return(
+        <h2 className="title">
+          { this.state.edit.field === 'name' ? (
+              <input value={ name }
+                     onKeyPress={this.saveValue.bind(this)}
+                     onChange={ this.onNameChange.bind(this) }
+                     onBlur={ this.saveValueOnBlur.bind(this) }
+                     autoFocus />
+          ) : (
+            <span> { name }
+              <Button bsStyle="link"
+                      onClick={ this.editField.bind(this, 'name') }>
+                <Glyphicon glyph="pencil" /></Button>
+            </span>
+            )}
+        </h2>
+      );
     }
 
     const batchSize = () => {
-      let bs = this.state.batch_size_tmp || batch_size
-      if (this.state.edit.field === 'batch_size') {
-        return(
+      let bs = this.state.batch_size_tmp || batch_size;
+      return(
+        <div>
+        { this.state.edit.field === 'batch_size' ? (
           <input value={ bs }
                  onChange={ this.onBatchChange.bind(this) }
                  onKeyPress={ this.saveBatchValue.bind(this) }
                  onBlur={ this.saveBatchValueOnBlur.bind(this)}
                  autoFocus />
-        );
-      } else {
-        return(
+        ) : (
           <div>
             { batch_size }
             <Button bsStyle="link"
@@ -213,8 +209,9 @@ class Recipe extends Component {
               <Glyphicon glyph="pencil" />
             </Button>
           </div>
-        );
-      }
+        )}
+        </div>
+      );
     }
 
     return (
