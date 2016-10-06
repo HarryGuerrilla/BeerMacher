@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Button, Navbar } from 'react-bootstrap';
 import classNames from 'classnames';
 import './App.css';
-import RecipeList from './RecipeList';
+import RecipeList from './Recipes/RecipeList';
 
-const recipes = require('./paleAle.json');
+const recipes = require('./assets/paleAle.json');
 
 class App extends Component {
   constructor(props) {

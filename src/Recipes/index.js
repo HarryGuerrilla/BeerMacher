@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import formatUnit from '../format-units'
+import formatUnit from '../helpers/format-units'
 import { Panel, Table, Button, Glyphicon } from 'react-bootstrap'
-import tools from '../recipe-helpers'
+import tools from '../helpers/recipe-helpers'
 import './index.css'
 
-const recipes = require('../paleAle.json')
+const recipes = require('../assets/paleAle.json')
 
 class Recipe extends Component {
 
@@ -46,7 +46,7 @@ class Recipe extends Component {
     return formatUnit(this.state.recipe.boil_time, { major_unit: 'min' })
   }
 
-  get boilSize() {
+  get boil_size() {
     let data = {
       batch_size: this.state.recipe.batch_size,
       equipment: this.state.recipe.equipment,
