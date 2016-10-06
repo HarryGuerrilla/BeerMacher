@@ -38,15 +38,15 @@ class Recipe extends Component {
     return formatUnit(r, { round: 0.01 })
   }
 
-  get batch_size() {
+  get batchSize() {
     return formatUnit(this.state.recipe.batch_size, { major_unit: 'gal' })
   }
 
-  get boil_time() {
+  get boilTime() {
     return formatUnit(this.state.recipe.boil_time, { major_unit: 'min' })
   }
 
-  get boil_size() {
+  get boilSize() {
     let data = {
       batch_size: this.state.recipe.batch_size,
       equipment: this.state.recipe.equipment,
@@ -92,7 +92,7 @@ class Recipe extends Component {
     let data = {
       og: this.og,
       equipment: this.state.recipe.equipment,
-      boil_size: this.boil_size,
+      boil_size: this.boilSize,
       batch_size: this.state.recipe.batch_size
     }
     let g = tools.calcPreBoilGravity(data)
@@ -222,7 +222,7 @@ class Recipe extends Component {
     }
 
     const batchSize = () => {
-      let bs = this.state.batch_size_tmp || this.batch_size
+      let bs = this.state.batch_size_tmp || this.batchSize
       return(
         <div>
         { this.state.edit.field === 'batch_size' ? (
@@ -233,7 +233,7 @@ class Recipe extends Component {
                  autoFocus />
         ) : (
           <div>
-            { this.batch_size }
+            { bs }
             <Button bsStyle="link"
                     bsSize="xsmall"
                     onClick={ this.editField.bind(this, 'batch_size') }>
@@ -308,7 +308,7 @@ class Recipe extends Component {
               </tr>
               <tr>
                 <th>Boil Size:</th>
-                <td>{ this.boil_size }</td>
+                <td>{ this.boilSize }</td>
               </tr>
               <tr>
                 <th>Pre-Boil Gravity:</th>
@@ -316,7 +316,7 @@ class Recipe extends Component {
               </tr>
               <tr>
                 <th>Boil Time:</th>
-                <td>{ this.boil_time }</td>
+                <td>{ this.boilTime }</td>
               </tr>
               <tr>
                 <th>Total Grains:</th>
