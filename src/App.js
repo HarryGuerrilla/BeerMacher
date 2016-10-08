@@ -4,14 +4,11 @@ import classNames from 'classnames';
 import './App.css';
 import RecipeList from './Recipes/RecipeList';
 
-const recipes = require('./assets/paleAle.json');
-
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       dataIn: false,
-      recipes: recipes.recipes
     };
 
     this.toggleData = this.toggleData.bind(this);
@@ -36,7 +33,7 @@ class App extends Component {
         </Navbar>
         <div className="container App">
           <div className="col-sm-4">
-            <RecipeList recipes={this.state.recipes} />
+            <RecipeList  />
           </div>
           <div className="col-sm-8">
             { this.props.children }

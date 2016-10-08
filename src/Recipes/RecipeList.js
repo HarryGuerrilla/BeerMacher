@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { ListGroup, Panel } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
-export default class RecipeList extends Component {
+class RecipeList extends Component {
   constructor({ props }) {
     super(props);
+
   }
 
   render() {
@@ -26,3 +28,11 @@ export default class RecipeList extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    recipes: state.recipes
+  }
+}
+
+export default connect(mapStateToProps)(RecipeList)
