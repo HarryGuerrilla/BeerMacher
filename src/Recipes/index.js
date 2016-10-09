@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import formatUnit from '../helpers/format-units'
 import { Panel, Table, Button, Glyphicon } from 'react-bootstrap'
+import { connect } from 'react-redux';
+
 import tools from '../helpers/recipe-helpers'
 import './index.css'
-
-const recipes = require('../assets/paleAle.json')
 
 class Recipe extends Component {
 
@@ -12,7 +12,7 @@ class Recipe extends Component {
     super(props)
 
     this.state = {
-      recipe: recipes.recipes[this.props.params.id],
+      recipe: props.recipes[props.params.id],
       edit: {
         field: '',
       },
@@ -335,4 +335,10 @@ class Recipe extends Component {
 
 }
 
-export default Recipe
+function mapStateToProps(state) {
+  return {
+    recipes: state.recipes
+  }
+}
+
+export default connect(mapStateToProps)(Recipe)

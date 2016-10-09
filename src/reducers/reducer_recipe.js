@@ -1,7 +1,10 @@
 import * as PaleAle from '../assets/paleAle.json'
 
-export default function() {
-  return [
-    ...PaleAle.recipes
-  ]
+export default function(state = [], action) {
+  switch(action.type) {
+  default:
+    return [
+      ...PaleAle.recipes
+    ]
+  }
 }

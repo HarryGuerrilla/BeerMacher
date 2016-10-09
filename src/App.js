@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Navbar } from 'react-bootstrap';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
 import './App.css';
 import RecipeList from './Recipes/RecipeList';
@@ -9,6 +10,7 @@ class App extends Component {
     super(props);
     this.state = {
       dataIn: false,
+      recipes: props.recipes,
     };
 
     this.toggleData = this.toggleData.bind(this);
@@ -52,4 +54,10 @@ class App extends Component {
   }
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    recipes: state.recipes
+  }
+}
+
+export default connect(mapStateToProps)(App)
