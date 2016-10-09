@@ -1,7 +1,7 @@
 {
   "recipes": [
     {
-      "id": 1,
+      "id": "1",
       "name": "American Pale Ale - BYO",
       "version":"1",
       "type":"All Grain",
