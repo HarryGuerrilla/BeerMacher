@@ -12,7 +12,9 @@ class Recipe extends Component {
     super(props)
 
     this.state = {
-      recipe: props.recipes[props.params.id],
+      recipe: props.recipes.filter((recipe) => {
+        return recipe.id === parseFloat(props.params.id)
+      })[0],
       edit: {
         field: '',
       },

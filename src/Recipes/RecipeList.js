@@ -13,12 +13,12 @@ class RecipeList extends Component {
     return(
       <Panel header="Recipes">
         <ListGroup>
-        { this.props.recipes.map((recipe, index) => {
+        { this.props.recipes.map((recipe) => {
           return(
-            <Link to={ 'recipe/' + index }
+            <Link to={ '/recipe/' + recipe.id }
                   className="list-group-item list-group-item-action"
                   activeClassName="active"
-                  key={ index }>
+                  key={ recipe.id }>
               { recipe.name }
             </Link>
           );
