@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import tools from '../helpers/recipe-helpers'
 import './index.css'
 
-class Recipe extends Component {
+export class Recipe extends Component {
 
   constructor(props) {
     super(props)

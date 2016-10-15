@@ -32,13 +32,13 @@ export default ( amount, { major_unit, minor_unit, round, save }) => {
     case 'ml':
       default_unit = 'L';
       break;
+    case 'min':
+      return Math.round(v) + ' min';
+    case '%':
+      return Math.round(v) + '%';
     default:
       default_unit = false;
     };
-
-    if (major_unit === '%') {
-      return Math.round(v) + '%';
-    }
 
   if (save) {
     let qty = (new Qty(v, major_unit)).to(default_unit);

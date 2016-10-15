@@ -42,7 +42,7 @@ const helpers = {
     let ppg = og * 1000 - 1000;
     let gp = ppg * (toGal(parseFloat(batch_size)) +
                     toGal(parseFloat(equipment.trub_chiller_loss)));
-    let bs = toGal(parseFloat(boil_size));
+    let bs = parseFloat(boil_size);
     let preBoil =  1 + gp/bs/1000;
     return preBoil;
   },
