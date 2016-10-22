@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import formatUnit from '../helpers/format-units'
-import * as _ from 'underscore';
 import { Panel, Table, Button, Glyphicon } from 'react-bootstrap'
 import { connect } from 'react-redux';
 
@@ -13,7 +12,7 @@ export class Recipe extends Component {
     super(props)
 
     this.state = {
-      recipe: _.find(props.recipes, (recipe) => {
+      recipe: props.recipes.find((recipe) => {
         return recipe.id === props.params.id
       }),
       edit: {
