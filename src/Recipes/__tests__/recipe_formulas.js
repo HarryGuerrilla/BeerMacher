@@ -1,6 +1,6 @@
 import React from 'react';
-import { Recipe } from '../Recipes';
-import * as data from '../assets/paleAle.json';
+import { Recipe } from '../index';
+import * as data from '../../assets/paleAle.json';
 
 const props = {
   recipes: data.recipes,
