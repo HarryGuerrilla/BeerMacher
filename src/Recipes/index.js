@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import formatUnit from '../helpers/format-units'
 import { Panel, Table, Button, Glyphicon } from 'react-bootstrap'
 import { connect } from 'react-redux';
+import Fermentables from '../Fermentables';
 
 import tools from '../helpers/recipe-helpers'
 import './index.css'
@@ -330,6 +331,9 @@ export class Recipe extends Component {
               </tr>
             </tbody>
           </Table>
+        </Panel>
+        <Panel header="Fermentables">
+          <Fermentables fermentables={ this.state.recipe.fermentables } />
         </Panel>
       </Panel>
     )

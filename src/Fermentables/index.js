@@ -1,10 +1,15 @@
 import React from 'react';
-import formatUnit from '../../format-units';
+import formatUnit from '../helpers/format-units.js';
+import tools from '../helpers/recipe-helpers.js';
 import { Button, Glyphicon } from 'react-bootstrap';
 
-export default ({fermentables, totalWeight}) => (
+const fermentablePercent = (fermentable, fermentables) => {
+  let pct = fermentable/tools.totalAmount(fermentables)*100
+  return Number(pct).toFixed(1) + '%';
+}
+
+export default ({fermentables}) => (
   <div className="span6">
-    <h2>Fermentables</h2>
     <table className="table table-hover table-bordered table-condensed">
       <thead>
         <tr>
@@ -20,10 +25,9 @@ export default ({fermentables, totalWeight}) => (
         <tr key={fermentable.name}>
           <td>{fermentable.name}</td>
           <td>{fermentable.type}</td>
-          <td>{Number((fermentable.amount / totalWeight)*100).toFixed(1) + '%'}</td>
-                        <td>{formatUnit({ amount: fermentable.amount + 'kg',
-                                          major_unit: 'lb',
-                                          minor_unit: 'oz' })}</td>
+          <td>{ fermentablePercent(fermentable.amount, fermentables) }</td>
+          <td>{formatUnit( fermentable.amount, {major_unit: 'lb',
+                                                minor_unit: 'oz'})}</td>
           <td><Button className="btn-mini"><Glyphicon glyph="trash" /></Button></td>
         </tr>
       )}
