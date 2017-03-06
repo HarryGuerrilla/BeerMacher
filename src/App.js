@@ -10,13 +10,17 @@ class App extends Component {
     super(props);
     this.state = {
       dataIn: false,
-      recipes: props.recipes,
+      recipes: props.recipes
     };
 
     this.toggleData = this.toggleData.bind(this);
   }
   toggleData() {
     this.setState({dataIn: !this.state.dataIn});
+  }
+  get appData() {
+    return { recipes: [...this.props.recipes],
+             recipe: this.props.recipe }
   }
   render() {
     const dataClass = classNames({
@@ -45,7 +49,7 @@ class App extends Component {
           </div>
           <div className={dataClass}>
             <pre className="text-left">
-              {JSON.stringify(this.state, null, 2)}
+              {JSON.stringify(this.appData, null, 2)}
             </pre>
           </div>
         </div>
@@ -56,7 +60,8 @@ class App extends Component {
 
 function mapStateToProps(state) {
   return {
-    recipes: state.recipes
+    recipes: state.recipes,
+    recipe: state.recipe
   }
 }
 

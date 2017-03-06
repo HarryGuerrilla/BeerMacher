@@ -3,27 +3,19 @@ import formatUnit from '../helpers/format-units'
 import { Panel, Table, Button, Glyphicon } from 'react-bootstrap'
 import { connect } from 'react-redux';
 import Fermentables from '../Fermentables';
+import { selectRecipe } from './actions/recipe_actions.js'
 
 import tools from '../helpers/recipe-helpers'
 import './index.css'
 
-export class Recipe extends Component {
+class Recipe extends Component {
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      recipe: props.recipes.find((recipe) => {
-        return recipe.id === props.params.id
-      }),
-      edit: {
-        field: '',
-      },
-      batch_size_tmp: '',
-    }
+  componentWillMount() {
+    this.props.selectRecipe(this.props.params.id)
   }
 
   get abv() {
+    if (this.og === 'N/A' || this.fg  === 'N/A') return 'N/A'
     let data = {
       og: this.og,
       fg: this.fg
@@ -33,6 +25,7 @@ export class Recipe extends Component {
   }
 
   get bitternessRatio() {
+    if (this.og === 'N/A' || this.ibus === 'N/A') return 'N/A'
     let data = {
       og: this.og,
       ibus: this.ibus
@@ -42,30 +35,39 @@ export class Recipe extends Component {
   }
 
   get batchSize() {
-    return formatUnit(this.state.recipe.batch_size, { major_unit: 'gal' })
+    if (!this.props.recipe.batch_size) return 'N/A'
+    return formatUnit(this.props.recipe.batch_size, { major_unit: 'gal' })
   }
 
   get boilTime() {
-    return formatUnit(this.state.recipe.boil_time, { major_unit: 'min' })
+    if (!this.props.recipe.boil_time) return 'N/A'
+    return formatUnit(this.props.recipe.boil_time, { major_unit: 'min' })
   }
 
   get boilSize() {
+    if (!this.props.recipe.batch_size ||
+        !this.props.recipe.equipment ||
+        !this.props.recipe.boil_time) {
+      return 'N/A'
+    }
     let data = {
-      batch_size: this.state.recipe.batch_size,
-      equipment: this.state.recipe.equipment,
-      boil_time: this.state.recipe.boil_time
+      batch_size: this.props.recipe.batch_size,
+      equipment: this.props.recipe.equipment,
+      boil_time: this.props.recipe.boil_time
     }
     let vol = tools.boilVolume(data)
     return formatUnit(vol, { major_unit: 'gal' })
   }
 
   get efficiency() {
-    return formatUnit(this.state.recipe.efficiency, { major_unit: '%' })
+    if (!this.props.recipe.efficiency) return 'N/A'
+    return formatUnit(this.props.recipe.efficiency, { major_unit: '%' })
   }
 
   get fg() {
+    if (!this.props.recipe.yeasts) return 'N/A'
     let data = {
-      yeasts: this.state.recipe.yeasts,
+      yeasts: this.props.recipe.yeasts,
       og: this.og
     }
     let g = tools.finalGravity(data)
@@ -73,102 +75,104 @@ export class Recipe extends Component {
   }
 
   get ibus() {
+    if(!this.props.recipe.hops || !this.props.recipe.batch_size) {
+      return 'N/A'
+    }
     let data = {
-      hops: this.state.recipe.hops,
+      hops: this.props.recipe.hops,
       og: this.og,
-      batch_size: this.state.recipe.batch_size
+      batch_size: this.props.recipe.batch_size
     }
     let ibus = tools.calculateIBUs(data)
     return formatUnit(ibus, { round: 1 })
   }
 
   get name() {
-    return this.state.recipe.name
+    if (!this.props.recipe.name) return 'Untitled'
+    return this.props.recipe.name
   }
 
   get og() {
-      let g =  tools.calcOriginalGravity(this.state.recipe)
-      return formatUnit(g, { round: 0.001 })
+    if (!this.props.recipe.fermentables) return 'N/A'
+    let g =  tools.calcOriginalGravity(this.props.recipe)
+    return formatUnit(g, { round: 0.001 })
   }
 
   get pbOG() {
+    if(!this.props.recipe.equipment || !this.props.recipe.batch_size) {
+      return 'N/A'
+    }
     let data = {
       og: this.og,
-      equipment: this.state.recipe.equipment,
+      equipment: this.props.recipe.equipment,
       boil_size: this.boilSize,
-      batch_size: this.state.recipe.batch_size
+      batch_size: this.props.recipe.batch_size
     }
     let g = tools.calcPreBoilGravity(data)
     return formatUnit(g, { round: 0.001 })
   }
 
   get srm() {
+    if(!this.props.recipe.fermentables ||
+       !this.props.recipe.batch_size ||
+       !this.props.recipe.equipment) {
+      return 'N/A'
+    }
     let data = {
-      fermentables: this.state.recipe.fermentables,
-      batch_size: this.state.recipe.batch_size,
-      equipment: this.state.recipe.equipment
+      fermentables: this.props.recipe.fermentables,
+      batch_size: this.props.recipe.batch_size,
+      equipment: this.props.recipe.equipment
     }
     let srm = tools.srm(data)
     return formatUnit(srm, { round: 0.1 })
   }
 
   get style() {
+    if (!this.props.recipe.style) {
+      return {
+        name: 'No Style Selected',
+        og_min: 'N/A',
+        og_max: '',
+        fg_min: 'N/A',
+        fg_max: '',
+        ibu_min: 'N/A',
+        ibu_max: '',
+        color_min: 'N/A',
+        color_max: '',
+        abv_min: 'N/A',
+        abv_max: '',
+      }
+    }
     return {
-      name: this.state.recipe.style.name,
-      og_min: formatUnit(this.state.recipe.style.og_min, { round: 0.001 }),
-      og_max: formatUnit(this.state.recipe.style.og_max, { round: 0.001 }),
-      fg_min: formatUnit(this.state.recipe.style.fg_min, { round: 0.001 }),
-      fg_max: formatUnit(this.state.recipe.style.fg_max, { round: 0.001 }),
-      ibu_min: formatUnit(this.state.recipe.style.ibu_min, { round: 1 }),
-      ibu_max: formatUnit(this.state.recipe.style.ibu_max, { round: 1 }),
-      color_min: formatUnit(this.state.recipe.style.color_min, { round: 0.1 }),
-      color_max: formatUnit(this.state.recipe.style.color_max, { round: 0.1 }),
-      abv_min: formatUnit(this.state.recipe.style.abv_min, { major_unit: '%' }),
-      abv_max: formatUnit(this.state.recipe.style.abv_max, { major_unit: '%' }),
+      name: this.props.recipe.style.name,
+      og_min: formatUnit(this.props.recipe.style.og_min, { round: 0.001 }),
+      og_max: formatUnit(this.props.recipe.style.og_max, { round: 0.001 }),
+      fg_min: formatUnit(this.props.recipe.style.fg_min, { round: 0.001 }),
+      fg_max: formatUnit(this.props.recipe.style.fg_max, { round: 0.001 }),
+      ibu_min: formatUnit(this.props.recipe.style.ibu_min, { round: 1 }),
+      ibu_max: formatUnit(this.props.recipe.style.ibu_max, { round: 1 }),
+      color_min: formatUnit(this.props.recipe.style.color_min, { round: 0.1 }),
+      color_max: formatUnit(this.props.recipe.style.color_max, { round: 0.1 }),
+      abv_min: formatUnit(this.props.recipe.style.abv_min, { major_unit: '%' }),
+      abv_max: formatUnit(this.props.recipe.style.abv_max, { major_unit: '%' }),
     }
   }
 
   get totalGrains() {
-    let w = tools.totalAmount(this.state.recipe.fermentables)
+    if (!this.props.recipe.fermentables) return 'N/A'
+    let w = tools.totalAmount(this.props.recipe.fermentables)
     return formatUnit(w, { major_unit: 'lb'})
   }
 
   get totalHops() {
-    let w = tools.totalAmount(this.state.recipe.hops)
+    if (!this.props.recipe.hops) return 'N/A'
+    let w = tools.totalAmount(this.props.recipe.hops)
     return formatUnit(w, { major_unit: 'oz' })
   }
 
   get version() {
-    return this.state.recipe.version
-  }
-
-  editField(field) {
-    this.setState({ edit: { field: field }})
-  }
-
-  onNameChange(event) {
-    let recipe = this.state.recipe
-    recipe.name = event.target.value
-    this.setState({ edit: { field: 'name' },
-                    recipe: recipe })
-  }
-
-  saveValue(event) {
-    let recipe = this.state.recipe
-    if (event.key === "Enter") {
-      this.setState({ edit: { field: ''},
-                      recipe: recipe })
-    }
-  }
-
-  saveValueOnBlur(event) {
-    let recipe = this.state.recipe
-    this.setState({ edit: { field: ''},
-                    recipe: recipe })
-  }
-
-  onBatchChange(event) {
-    this.setState({ batch_size_tmp: event.target.value })
+    if (!this.props.recipe.version) return 0
+    return this.props.recipe.version
   }
 
   fmtBoilSizeForSave(bs) {
@@ -177,84 +181,48 @@ export class Recipe extends Component {
     return bs
   }
 
-  saveBatchValue(event) {
-    let recipe = this.state.recipe
-    if (event.key === "Enter") {
-      let bs = this.state.batch_size_tmp ||
-               formatUnit(recipe.batch_size, { major_unit: 'gal'})
-      recipe.batch_size = this.fmtBoilSizeForSave(bs)
-      recipe.boil_size = tools.boilVolume(recipe)
-      this.setState({ edit: { field: '' },
-                      recipe: recipe,
-                      batch_size_tmp: '',
-                    })
-    }
-  }
-
-  saveBatchValueOnBlur() {
-    let recipe = this.state.recipe
-    let bs = this.state.batch_size_tmp ||
-             formatUnit(recipe.batch_size, { major_unit: 'gal'})
-    recipe.batch_size = this.fmtBoilSizeForSave(bs)
-    recipe.boil_size = tools.boilVolume(recipe)
-    this.setState({ edit: { field: '' },
-                    recipe: recipe,
-                    batch_size_tmp: '',
-    })
-  }
-
   render() {
+    if (!this.props.recipe.id) {
+      return(<div>Loading...</div>)
+    }
+
     const recipeName = () => {
-      return(
-        <h2 className="title">
-          { this.state.edit.field === 'name' ? (
-              <input value={ this.name }
-                     onKeyPress={this.saveValue.bind(this)}
-                     onChange={ this.onNameChange.bind(this) }
-                     onBlur={ this.saveValueOnBlur.bind(this) }
-                     autoFocus />
-          ) : (
-            <span> { this.name }
-              <Button bsStyle="link"
-                      onClick={ this.editField.bind(this, 'name') }>
-                <Glyphicon glyph="pencil" /></Button>
-            </span>
-            )}
-        </h2>
-      )
+      if(this.name) {
+        return(
+          <div>
+            <h2 className="title">
+              <span> { this.name }
+                <Button bsStyle="link">
+                  <Glyphicon glyph="pencil" />
+                </Button>
+              </span>
+            </h2>
+            <p>Ver. { this.version }</p>
+          </div>
+        )
+      } else {
+        return 'Add Recipe Name'
+      }
     }
 
     const batchSize = () => {
-      let bs = this.state.batch_size_tmp || this.batchSize
+      let bs = this.props.batch_size_tmp || this.batchSize
       return(
         <div>
-        { this.state.edit.field === 'batch_size' ? (
-          <input value={ bs }
-                 onChange={ this.onBatchChange.bind(this) }
-                 onKeyPress={ this.saveBatchValue.bind(this) }
-                 onBlur={ this.saveBatchValueOnBlur.bind(this)}
-                 autoFocus />
-        ) : (
           <div>
             { bs }
             <Button bsStyle="link"
-                    bsSize="xsmall"
-                    onClick={ this.editField.bind(this, 'batch_size') }>
+                    bsSize="xsmall">
               <Glyphicon glyph="pencil" />
             </Button>
           </div>
-        )}
         </div>
       )
     }
 
-    return (
-      <Panel>
-        <header>
-          { recipeName() }
-          <p>Ver. { this.version }</p>
-        </header>
-        <Panel header="Style Characteristics">
+    const styleCharacteristics = () => {
+      return (
+        <div>
           <h3>{ this.style.name }</h3>
           <Table condensed bordered>
             <thead>
@@ -297,6 +265,26 @@ export class Recipe extends Component {
               </tr>
             </tbody>
           </Table>
+        </div>
+      )
+    }
+
+    const recipeFermentables = () => {
+      if (!this.props.recipe.fermentables){
+        return 'Add Fermentables'
+      }
+      return (
+        <Fermentables fermentables={ this.props.recipe.fermentables } />
+      )
+    }
+
+    return (
+      <Panel>
+        <header>
+          { recipeName() }
+        </header>
+        <Panel header="Style Characteristics">
+          { styleCharacteristics() }
         </Panel>
         <Panel header="Batch Info">
           <Table condensed bordered>
@@ -333,7 +321,7 @@ export class Recipe extends Component {
           </Table>
         </Panel>
         <Panel header="Fermentables">
-          <Fermentables fermentables={ this.state.recipe.fermentables } />
+          { recipeFermentables() }
         </Panel>
       </Panel>
     )
@@ -343,8 +331,8 @@ export class Recipe extends Component {
 
 function mapStateToProps(state) {
   return {
-    recipes: state.recipes
+    recipe: state.recipe
   }
 }
 
-export default connect(mapStateToProps)(Recipe)
+export default connect(mapStateToProps, { selectRecipe })(Recipe)

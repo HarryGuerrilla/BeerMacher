@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { ListGroup, Panel } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { selectRecipe } from './actions/recipe_actions.js'
+import { bindActionCreators } from 'redux';
 
 class RecipeList extends Component {
   constructor({ props }) {
@@ -10,6 +12,10 @@ class RecipeList extends Component {
   }
 
   render() {
+    if(this.props.recipes.length === 0) {
+      console.log('recipes ==', this.props.recipes)
+      return(<div>Loading...</div>)
+    }
     return(
       <Panel header="Recipes">
         <ListGroup>
@@ -18,6 +24,7 @@ class RecipeList extends Component {
             <Link to={ '/recipe/' + recipe.id }
                   className="list-group-item list-group-item-action"
                   activeClassName="active"
+                  onClick={ () => this.props.selectRecipe(recipe.id) }
                   key={ recipe.id }>
               { recipe.name }
             </Link>
@@ -35,4 +42,8 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(RecipeList)
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ selectRecipe }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RecipeList)
