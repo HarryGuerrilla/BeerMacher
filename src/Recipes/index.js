@@ -8,7 +8,7 @@ import { selectRecipe } from './actions/recipe_actions.js'
 import tools from '../helpers/recipe-helpers'
 import './index.css'
 
-class Recipe extends Component {
+export class Recipe extends Component {
 
   componentWillMount() {
     this.props.selectRecipe(this.props.params.id)

@@ -4,7 +4,11 @@ import { Recipe } from '../';
 import * as data from '../../assets/paleAle.json';
 
 const props = {
+  recipe: data.recipes[0],
   recipes: data.recipes,
+  selectRecipe: (id) => {
+    return data.recipes[0]
+  },
   params: {
     id: "1",
   }

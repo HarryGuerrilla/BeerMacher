@@ -3,7 +3,7 @@ import { Recipe } from '../index';
 import * as data from '../../assets/paleAle.json';
 
 const props = {
-  recipes: data.recipes,
+  recipe: data.recipes[0],
   params: {
     id: "1",
   }
