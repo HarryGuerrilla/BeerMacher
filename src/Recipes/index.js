@@ -269,7 +269,7 @@ export class Recipe extends Component {
       )
     }
 
-    const recipeFermentables = () => {
+    const recipeIngredients = () => {
       if (!this.props.recipe.fermentables){
         return 'Add Fermentables'
       }
@@ -320,8 +320,8 @@ export class Recipe extends Component {
             </tbody>
           </Table>
         </Panel>
-        <Panel header="Fermentables">
-          { recipeFermentables() }
+        <Panel header="Ingredients">
+          { recipeIngredients() }
         </Panel>
       </Panel>
     )
