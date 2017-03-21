@@ -1,4 +1,4 @@
-import { SELECT_RECIPE, CLEAR_RECIPE } from '../actions/recipe_actions'
+import { SELECT_RECIPE } from '../actions/recipe_actions'
 
 const INITIAL_STATE = {}
 
