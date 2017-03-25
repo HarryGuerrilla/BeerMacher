@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { ListGroup, Panel } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { selectRecipe } from './actions/recipe_actions.js'
+import { selectRecipe, getAllRecipeNames } from './actions/recipe_actions.js'
 import { bindActionCreators } from 'redux';
 
 class RecipeList extends Component {
@@ -11,9 +11,12 @@ class RecipeList extends Component {
 
   }
 
+  componentWillMount() {
+    this.props.getAllRecipeNames()
+  }
+
   render() {
     if(this.props.recipes.length === 0) {
-      console.log('recipes ==', this.props.recipes)
       return(<div>Loading...</div>)
     }
     return(
@@ -43,7 +46,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ selectRecipe }, dispatch)
+  return bindActionCreators({ selectRecipe, getAllRecipeNames }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecipeList)
