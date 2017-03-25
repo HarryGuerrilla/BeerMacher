@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "react-scripts": "0.6.0"
+    "react-scripts": "0.6.0",
+    "redux-mock-store": "^1.2.2"
   },
   "dependencies": {
     "brauhaus": "^1.1.1",
