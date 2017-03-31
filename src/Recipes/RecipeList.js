@@ -2,36 +2,36 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { ListGroup, Panel } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { selectRecipe, getAllRecipeNames } from './actions/recipe_actions.js'
+import { selectRecipe, getAllRecipeNames } from './actions/recipe_actions.js';
 import { bindActionCreators } from 'redux';
 
 class RecipeList extends Component {
   constructor({ props }) {
     super(props);
-
   }
 
   componentWillMount() {
-    this.props.getAllRecipeNames()
+    this.props.getAllRecipeNames();
   }
 
   render() {
-    if(this.props.recipes.length === 0) {
-      return(<div>Loading...</div>)
+    if (this.props.recipes.length === 0) {
+      return <div>Loading...</div>;
     }
-    return(
+    return (
       <Panel header="Recipes">
         <ListGroup>
-        { this.props.recipes.map((recipe) => {
-          return(
-            <Link to={ '/recipe/' + recipe.id }
-                  className="list-group-item list-group-item-action"
-                  activeClassName="active"
-                  onClick={ () => this.props.selectRecipe(recipe.id) }
-                  key={ recipe.id }>
-              { recipe.name }
-            </Link>
-          );
+          {this.props.recipes.map(recipe => {
+            return (
+              <Link
+                to={'/recipe/' + recipe.id}
+                className="list-group-item list-group-item-action"
+                activeClassName="active"
+                onClick={() => this.props.selectRecipe(recipe.id)}
+                key={recipe.id}>
+                {recipe.name}
+              </Link>
+            );
           })}
         </ListGroup>
       </Panel>
@@ -41,12 +41,12 @@ class RecipeList extends Component {
 
 function mapStateToProps(state) {
   return {
-    recipes: state.recipes
-  }
+    recipes: state.recipes,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ selectRecipe, getAllRecipeNames }, dispatch)
+  return bindActionCreators({ selectRecipe, getAllRecipeNames }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RecipeList)
+export default connect(mapStateToProps, mapDispatchToProps)(RecipeList);

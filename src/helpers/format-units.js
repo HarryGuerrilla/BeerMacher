@@ -6,11 +6,11 @@ const roundDown = () => {
   };
 };
 
-export default ( amount, { major_unit, minor_unit, round, save }) => {
+export default (amount, { major_unit, minor_unit, round, save }) => {
   let default_unit = '';
   let v = parseFloat(amount);
 
-    switch(major_unit) {
+  switch (major_unit) {
     case 'gal':
       default_unit = 'L';
       break;
@@ -38,17 +38,17 @@ export default ( amount, { major_unit, minor_unit, round, save }) => {
       return Math.round(v) + '%';
     default:
       default_unit = false;
-    };
+  }
 
   if (save) {
-    let qty = (new Qty(v, major_unit)).to(default_unit);
+    let qty = new Qty(v, major_unit).to(default_unit);
     return qty.scalar;
   }
 
   if (!default_unit) {
     let dc;
     if (round > 0) {
-      v = Math.round(v * (1/round))/(1/round);
+      v = Math.round(v * (1 / round)) / (1 / round);
       dc = round < 1 ? round.toString().split('.')[1].length : 0;
       return v.toFixed(dc);
     } else {
@@ -57,13 +57,14 @@ export default ( amount, { major_unit, minor_unit, round, save }) => {
   }
 
   if (minor_unit) {
-    let qty = (new Qty(v, default_unit)).to(major_unit);
+    let qty = new Qty(v, default_unit).to(major_unit);
     let qty2 = qty.sub(qty.format(major_unit, roundDown()));
-    return(qty.format(major_unit, roundDown()).toString() + ' '
-           + qty2.to(minor_unit).toPrec(minor_unit).toString());
+    return qty.format(major_unit, roundDown()).toString() +
+      ' ' +
+      qty2.to(minor_unit).toPrec(minor_unit).toString();
   } else {
-    let qty = (new Qty(v, default_unit)).to(major_unit);
+    let qty = new Qty(v, default_unit).to(major_unit);
     let prec = '0.01 ' + major_unit;
-    return(qty.toPrec(prec).toString());
+    return qty.toPrec(prec).toString();
   }
-}
+};

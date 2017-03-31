@@ -12,19 +12,15 @@ import reducers from './reducers';
 import './index.css';
 import './bootstrap/css/bootstrap.min.css';
 
-const store = createStore(
-  reducers,
-  {},
-  applyMiddleware(thunk)
-);
+const store = createStore(reducers, {}, applyMiddleware(thunk));
 const history = syncHistoryWithStore(browserHistory, store);
 
 ReactDOM.render(
-  <Provider store={ store }>
-    <Router history={ history }>
-      <Route path="/" component={ App }>
-        <IndexRoute component={ Home }></IndexRoute>
-        <Route path="recipe/:id" component={ Recipe }></Route>
+  <Provider store={store}>
+    <Router history={history}>
+      <Route path="/" component={App}>
+        <IndexRoute component={Home} />
+        <Route path="recipe/:id" component={Recipe} />
       </Route>
     </Router>
   </Provider>,

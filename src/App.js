@@ -10,17 +10,19 @@ class App extends Component {
     super(props);
     this.state = {
       dataIn: false,
-      recipes: props.recipes
+      recipes: props.recipes,
     };
 
     this.toggleData = this.toggleData.bind(this);
   }
   toggleData() {
-    this.setState({dataIn: !this.state.dataIn});
+    this.setState({ dataIn: !this.state.dataIn });
   }
   get appData() {
-    return { recipes: [...this.props.recipes],
-             recipe: this.props.recipe }
+    return {
+      recipes: [...this.props.recipes],
+      recipe: this.props.recipe,
+    };
   }
   render() {
     const dataClass = classNames({
@@ -30,7 +32,7 @@ class App extends Component {
     });
     return (
       <div>
-        <Navbar role="navigation" fixedTop={ true }>
+        <Navbar role="navigation" fixedTop={true}>
           <Navbar.Header>
             <Navbar.Brand>
               <a href="#">Recipes</a>
@@ -39,13 +41,13 @@ class App extends Component {
         </Navbar>
         <div className="container App">
           <div className="col-sm-4">
-            <RecipeList  />
+            <RecipeList />
           </div>
           <div className="col-sm-8">
-            { this.props.children }
+            {this.props.children}
           </div>
-          <div className="col-sm-12" >
-            <Button onClick={ this.toggleData }>View State</Button>
+          <div className="col-sm-12">
+            <Button onClick={this.toggleData}>View State</Button>
           </div>
           <div className={dataClass}>
             <pre className="text-left">
@@ -61,8 +63,8 @@ class App extends Component {
 function mapStateToProps(state) {
   return {
     recipes: state.recipes,
-    recipe: state.recipe
-  }
+    recipe: state.recipe,
+  };
 }
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps)(App);
