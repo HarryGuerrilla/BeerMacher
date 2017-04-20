@@ -12,6 +12,8 @@ const ingredientList = shallow(
     yeasts={r.yeasts}
     miscs={r.miscs}
     waters={r.waters}
+    og={r.og}
+    batch_size={r.batch_size}
   />
 );
 
@@ -39,75 +41,71 @@ describe('Recipe', () => {
 
   it('should order ingredients by when they are used', () => {
     // 1
-    expect(getAmount(ingredients, 1)).toEqual('1.00 tbsp');
-    expect(getName(ingredients, 1)).toEqual(
-      'PH 5.2 Stabilizer (Mash 60.0 mins)'
-    );
+    expect(getAmount(ingredients, 1)).toEqual('1 tb');
+    expect(getName(ingredients, 1)).toEqual('PH 5.2 Stabilizer (Mash 60 min)');
     expect(getType(ingredients, 1)).toEqual('Water Agent');
     expect(getPctIbu(ingredients, 1)).toEqual('-');
 
     // 2
-    expect(getAmount(ingredients, 2)).toEqual('10 lbs 8.0 oz');
+    expect(getAmount(ingredients, 2)).toEqual('10 lbs 8 oz');
     expect(getName(ingredients, 2)).toEqual('Pale Malt (2 Row) US (2.0 SRM)');
     expect(getType(ingredients, 2)).toEqual('Grain');
     expect(getPctIbu(ingredients, 2)).toEqual('85.7%');
 
     // 3
-    expect(getAmount(ingredients, 3)).toEqual('10.0 oz');
+    expect(getAmount(ingredients, 3)).toEqual('10 oz');
     expect(getName(ingredients, 3)).toEqual('Munich Malt (8.0 SRM)');
     expect(getType(ingredients, 3)).toEqual('Grain');
     expect(getPctIbu(ingredients, 3)).toEqual('5.1%');
 
     // 4
-    expect(getAmount(ingredients, 4)).toEqual('10.0 oz');
+    expect(getAmount(ingredients, 4)).toEqual('10 oz');
     expect(getName(ingredients, 4)).toEqual('Victory Malt (28.0 SRM)');
     expect(getType(ingredients, 4)).toEqual('Grain');
     expect(getPctIbu(ingredients, 4)).toEqual('5.1%');
 
     // 5
-    expect(getAmount(ingredients, 5)).toEqual('8.0 oz');
-    expect(getName(ingredients, 5)).toEqual('Wheat Malt, Ger (2.0 SRM)');
+    expect(getAmount(ingredients, 5)).toEqual('8 oz');
+    expect(getName(ingredients, 5)).toEqual('Wheat Malt,Ger (2.0 SRM)');
     expect(getType(ingredients, 5)).toEqual('Grain');
     expect(getPctIbu(ingredients, 5)).toEqual('4.1%');
 
     // 6
     expect(getAmount(ingredients, 6)).toEqual('0.65 oz');
-    expect(getName(ingredients, 6)).toEqual(
-      'Horizon [10.10 %] - Boil 60.0 min'
-    );
+    expect(getName(ingredients, 6)).toEqual('Horizon [10.10 %] - Boil 60 min');
     expect(getType(ingredients, 6)).toEqual('Hop');
-    expect(getPctIbu(ingredients, 6)).toEqual('21.4 IBUs');
+    expect(getPctIbu(ingredients, 6)).toEqual('22.3 IBUs');
 
     // 7
     expect(getAmount(ingredients, 7)).toEqual('0.25 tsp');
-    expect(getName(ingredients, 7)).toEqual('Irish Moss (Boil 10.0 mins)');
+    expect(getName(ingredients, 7)).toEqual('Irish Moss (Boil 10 min)');
     expect(getType(ingredients, 7)).toEqual('Fining');
     expect(getPctIbu(ingredients, 7)).toEqual('-');
 
     // 8
-    expect(getAmount(ingredients, 8)).toEqual('0.50 oz');
-    expect(getName(ingredients, 8)).toEqual('Cascade [5.90 %] - Boil 10.0 min');
+    expect(getAmount(ingredients, 8)).toEqual('0.5 oz');
+    expect(getName(ingredients, 8)).toEqual('Cascade [5.90 %] - Boil 10 min');
     expect(getType(ingredients, 8)).toEqual('Hop');
-    expect(getPctIbu(ingredients, 8)).toEqual('3.5 IBUs');
+    expect(getPctIbu(ingredients, 8)).toEqual('3.6 IBUs');
 
     // 9
-    expect(getAmount(ingredients, 9)).toEqual('0.40 oz');
+    expect(getAmount(ingredients, 9)).toEqual('0.4 oz');
     expect(getName(ingredients, 9)).toEqual(
-      'Centennial [11.40 %] - Boil 10.0 min'
+      'Centennial [11.40 %] - Boil 10 min'
     );
     expect(getType(ingredients, 9)).toEqual('Hop');
-    expect(getPctIbu(ingredients, 9)).toEqual('5.4 IBUs');
+    expect(getPctIbu(ingredients, 9)).toEqual('5.6 IBUs');
 
     // 10
-    expect(getAmount(ingredients, 10)).toEqual('0.50 oz');
-    expect(getName(ingredients, 10)).toEqual('Cascade [6.00 %] - Boil 0.0 min');
+    expect(getAmount(ingredients, 10)).toEqual('0.5 oz');
+    expect(getName(ingredients, 10)).toEqual('Cascade [6.00 %] - Boil 0 min');
     expect(getType(ingredients, 10)).toEqual('Hop');
     expect(getPctIbu(ingredients, 10)).toEqual('0.0 IBUs');
 
     // 11
-    expect(getAmount(ingredients, 11)).toEqual('0.50 oz');
+    expect(getAmount(ingredients, 11)).toEqual('0.5 oz');
     expect(getName(ingredients, 11)).toEqual(
-      'Centennial [9.00 %] - Boil 0.0 min'
+      'Centennial [9.00 %] - Boil 0 min'
     );
     expect(getType(ingredients, 11)).toEqual('Hop');
     expect(getPctIbu(ingredients, 11)).toEqual('0.0 IBUs');
@@ -121,7 +119,7 @@ describe('Recipe', () => {
     expect(getPctIbu(ingredients, 12)).toEqual('-');
 
     // 13
-    expect(getAmount(ingredients, 13)).toEqual('0.50 oz');
+    expect(getAmount(ingredients, 13)).toEqual('0.5 oz');
     expect(getName(ingredients, 13)).toEqual(
       'Cascade [5.90 %] - Dry Hop 3.0 Days'
     );
@@ -129,7 +127,7 @@ describe('Recipe', () => {
     expect(getPctIbu(ingredients, 13)).toEqual('0.0 IBUs');
 
     // 14
-    expect(getAmount(ingredients, 14)).toEqual('0.50 oz');
+    expect(getAmount(ingredients, 14)).toEqual('0.5 oz');
     expect(getName(ingredients, 14)).toEqual(
       'Centennial [11.40 %] - Dry Hop 3.0 Days'
     );
