@@ -56,7 +56,7 @@ const sortIngredients = ({ fermentables, hops, yeasts, waters, miscs }) => {
       ingredient.order = ingredient.add_after_boil === true
         ? order.post_pitch.fermentables
         : order.mash.fermentables;
-      ingredients.push(ingredient);
+      return ingredients.push(ingredient);
     });
   }
 
@@ -79,7 +79,7 @@ const sortIngredients = ({ fermentables, hops, yeasts, waters, miscs }) => {
         default:
           ingredient.order = order.boil.hops;
       }
-      ingredients.push(ingredient);
+      return ingredients.push(ingredient);
     });
   }
 
@@ -88,7 +88,7 @@ const sortIngredients = ({ fermentables, hops, yeasts, waters, miscs }) => {
       ingredient.category = 'yeast';
       ingredient.id = index;
       ingredient.order = order.pitch.yeast;
-      ingredients.push(ingredient);
+      return ingredients.push(ingredient);
     });
   }
 
@@ -97,7 +97,7 @@ const sortIngredients = ({ fermentables, hops, yeasts, waters, miscs }) => {
       ingredient.category = 'water';
       ingredient.id = index;
       ingredient.order = order.water;
-      ingredients.push(ingredient);
+      return ingredients.push(ingredient);
     });
   }
 
@@ -164,10 +164,10 @@ const sortIngredients = ({ fermentables, hops, yeasts, waters, miscs }) => {
   }
 
   ingredients.sort((a, b) => {
-    a.time = Number.parseFloat(a.time)
-    a.amount = Number.parseFloat(a.amount)
-    b.time = Number.parseFloat(b.time)
-    b.amount = Number.parseFloat(b.amount)
+    a.time = Number.parseFloat(a.time);
+    a.amount = Number.parseFloat(a.amount);
+    b.time = Number.parseFloat(b.time);
+    b.amount = Number.parseFloat(b.amount);
 
     if (a.order < b.order) return -1;
 
@@ -183,7 +183,6 @@ const sortIngredients = ({ fermentables, hops, yeasts, waters, miscs }) => {
       if (a.name > b.name) return 1;
       if (a.name < b.name) return -1;
       return 0;
-
     } else if (a.category === 'fermentable') {
       if (a.amount < b.amount) return 1;
       if (a.amount > b.amount) return -1;
