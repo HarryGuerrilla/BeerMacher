@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import formatUnit from '../helpers/format-units';
 import { Panel, Table, Button, Glyphicon } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import Fermentables from '../Fermentables';
+import IngredientsList from './IngredientsList';
 import { selectRecipe } from './actions/recipe_actions.js';
 
 import tools from '../helpers/recipe-helpers';
@@ -272,18 +272,20 @@ export class Recipe extends Component {
       );
     };
 
-    const recipeIngredients = () => {
-      if (!this.props.recipe.fermentables) {
-        return 'Add Fermentables';
-      }
-      return <Fermentables fermentables={this.props.recipe.fermentables} />;
-    };
-
     return (
       <Panel>
         <header>
           {recipeName()}
         </header>
+        <IngredientsList
+          hops={this.props.recipe.hops}
+          fermentables={this.props.recipe.fermentables}
+          yeasts={this.props.recipe.yeasts}
+          miscs={this.props.recipe.miscs}
+          waters={this.props.recipe.waters}
+          og={this.og}
+          batch_size={this.props.recipe.batch_size}
+        />
         <Panel header="Style Characteristics">
           {styleCharacteristics()}
         </Panel>
@@ -320,9 +322,6 @@ export class Recipe extends Component {
               </tr>
             </tbody>
           </Table>
-        </Panel>
-        <Panel header="Ingredients">
-          {recipeIngredients()}
         </Panel>
       </Panel>
     );
