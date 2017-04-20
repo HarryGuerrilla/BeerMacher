@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Panel, Table } from 'react-bootstrap';
 import sortIngredients from './helpers/sort_ingredients';
 import formatUnit from '../helpers/format-units';
 import tools from '../helpers/recipe-helpers';
@@ -109,33 +110,36 @@ class IngredientList extends Component {
 
   render() {
     return (
-      <div>
-        <h2>Ingredients</h2>
-        <table>
-          <tr>
-            <th>Amount</th>
-            <th>Name</th>
-            <th>Type</th>
-            <th>%/IBU</th>
-          </tr>
-          {this.ingredients.map(ingredient => {
-            return (
-              <tr>
-                <td>{this.formatAmount(ingredient)}</td>
-                <td>{this.formatName(ingredient)}</td>
-                <td>{this.formatType(ingredient)}</td>
-                <td>
-                  {this.formatPctIBU(
-                    ingredient,
-                    this.props.og,
-                    this.props.batch_size
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </table>
-      </div>
+      <Panel header="Ingredients">
+        <Table condensed bordered>
+          <thead>
+            <tr>
+              <th>Amount</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th>%/IBU</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.ingredients.map(ingredient => {
+              return (
+                <tr>
+                  <td>{this.formatAmount(ingredient)}</td>
+                  <td>{this.formatName(ingredient)}</td>
+                  <td>{this.formatType(ingredient)}</td>
+                  <td>
+                    {this.formatPctIBU(
+                      ingredient,
+                      this.props.og,
+                      this.props.batch_size
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      </Panel>
     );
   }
 }
