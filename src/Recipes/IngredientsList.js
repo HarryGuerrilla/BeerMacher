@@ -4,10 +4,6 @@ import formatUnit from '../helpers/format-units';
 import tools from '../helpers/recipe-helpers';
 
 class IngredientList extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   get ingredients() {
     const ingredients = sortIngredients(this.props);
     console.log(ingredients);
@@ -20,35 +16,45 @@ class IngredientList extends Component {
   }
 
   formatAmount({ category, amount, amount_is_weight }) {
+    let formattedAmount = '';
     switch (category) {
       case 'hop':
-        return formatUnit(amount, { major_unit: 'oz', round: 0.01 });
+        formattedAmount = formatUnit(amount, { major_unit: 'oz', round: 0.01 });
         break;
       case 'fermentable':
         if (amount >= 0.453592) {
-          return formatUnit(amount, { major_unit: 'lb', minor_unit: 'oz' });
+          formattedAmount = formatUnit(amount, {
+            major_unit: 'lb',
+            minor_unit: 'oz',
+          });
         } else {
-          return formatUnit(amount, { major_unit: 'oz' });
+          formattedAmount = formatUnit(amount, { major_unit: 'oz' });
         }
         break;
       case 'misc':
         if (amount_is_weight === 'TRUE') {
-          return formatUnit(amount, { major_unit: 'oz' });
+          formattedAmount = formatUnit(amount, { major_unit: 'oz' });
         } else {
           if (amount >= 0.0147868) {
-            return formatUnit(amount, { major_unit: 'tbsp', round: 0.001 });
+            formattedAmount = formatUnit(amount, {
+              major_unit: 'tbsp',
+              round: 0.001,
+            });
           } else {
-            return formatUnit(amount, { major_unit: 'tsp' });
+            formattedAmount = formatUnit(amount, { major_unit: 'tsp' });
           }
         }
         break;
       case 'yeast':
         if (amount_is_weight === 'FALSE') {
-          return Number.parseFloat(amount / 0.0177442).toFixed(1) + ' pkg';
+          formattedAmount = Number.parseFloat(amount / 0.0177442).toFixed(1) +
+            ' pkg';
         }
+        break;
       default:
-        return amount;
+        break;
     }
+    return formattedAmount;
   }
 
   formatName(
@@ -60,11 +66,11 @@ class IngredientList extends Component {
     alpha = Number.parseFloat(alpha).toFixed(2);
     color = Number.parseFloat(color).toFixed(1);
 
-    if (category == 'fermentable') {
+    if (category === 'fermentable') {
       return `${name} (${color} SRM)`;
-    } else if (category == 'hop') {
+    } else if (category === 'hop') {
       return `${name} [${alpha} %] - ${use} ${time}`;
-    } else if (category == 'yeast') {
+    } else if (category === 'yeast') {
       return `${name} (${laboratory} #${product_id}) [${formatUnit(amount, {
         major_unit: 'ml',
       })}]`;
@@ -74,9 +80,9 @@ class IngredientList extends Component {
   }
 
   formatPctIBU({ category, amount, alpha, time, use }, og, batch_size) {
-    if (category == 'fermentable') {
+    if (category === 'fermentable') {
       return Math.round(amount / this.totalGrainWeight * 1000) / 10 + '%';
-    } else if (category == 'hop') {
+    } else if (category === 'hop') {
       const hops = [
         {
           amount,
@@ -92,9 +98,9 @@ class IngredientList extends Component {
   }
 
   formatType({ category, type }) {
-    if (category == 'hop') {
+    if (category === 'hop') {
       return 'Hop';
-    } else if (category == 'yeast') {
+    } else if (category === 'yeast') {
       return 'Yeast';
     } else {
       return type;
