@@ -123,7 +123,7 @@ class IngredientList extends Component {
           <tbody>
             {this.ingredients.map(ingredient => {
               return (
-                <tr>
+                <tr key={ ingredient.id }>
                   <td>{this.formatAmount(ingredient)}</td>
                   <td>{this.formatName(ingredient)}</td>
                   <td>{this.formatType(ingredient)}</td>

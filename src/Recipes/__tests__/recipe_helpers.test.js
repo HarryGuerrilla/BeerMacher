@@ -1,11 +1,11 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import IngredientList from '../IngredientsList';
 import * as data from '../../assets/paleAle.json';
 
 const r = data.recipes[0];
 
-const ingredientList = shallow(
+const ingredientList = mount(
   <IngredientList
     hops={r.hops}
     fermentables={r.fermentables}
@@ -36,7 +36,7 @@ function getPctIbu(ingredients, index) {
 const ingredients = ingredientList.find('tr');
 describe('Recipe', () => {
   it('should have ingredients', () => {
-    expect(ingredientList.find('h2').text()).toEqual('Ingredients');
+    expect(ingredientList.find('.panel-heading').text()).toEqual('Ingredients');
   });
 
   it('should order ingredients by when they are used', () => {

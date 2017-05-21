@@ -102,7 +102,8 @@ const sortIngredients = ({ fermentables, hops, yeasts, waters, miscs }) => {
   }
 
   if (miscs) {
-    miscs.map(ingredient => {
+    miscs.map((ingredient, index) => {
+      ingredient.id = index;
       ingredient.category = 'misc';
       switch (ingredient.use) {
         case 'Boil':
@@ -191,6 +192,11 @@ const sortIngredients = ({ fermentables, hops, yeasts, waters, miscs }) => {
       return 0;
     }
     return 0;
+  });
+
+  ingredients = ingredients.map((ingredient, index) => {
+    ingredient.id = index;
+    return ingredient;
   });
 
   return ingredients;
