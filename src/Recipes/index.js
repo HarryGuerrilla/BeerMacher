@@ -185,7 +185,7 @@ export class Recipe extends Component {
   }
 
   render() {
-    if (!this.props.recipe.id) {
+    if (!this.props.recipe) {
       return <div>Loading...</div>;
     }
 

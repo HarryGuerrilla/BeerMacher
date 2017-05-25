@@ -15,21 +15,24 @@ class RecipeList extends Component {
   }
 
   render() {
-    if (this.props.recipes.length === 0) {
+    const recipes = this.props.recipes;
+
+    if (recipes.length === 0) {
       return <div>Loading...</div>;
     }
+
     return (
       <Panel header="Recipes">
         <ListGroup>
-          {this.props.recipes.map(recipe => {
+          {Object.keys(recipes).map(recipe => {
             return (
               <Link
-                to={'/recipe/' + recipe.id}
+                to={'/recipe/' + recipe}
                 className="list-group-item list-group-item-action"
                 activeClassName="active"
-                onClick={() => this.props.selectRecipe(recipe.id)}
-                key={recipe.id}>
-                {recipe.name}
+                onClick={() => this.props.selectRecipe(recipe)}
+                key={recipe}>
+                {recipes[recipe].name}
               </Link>
             );
           })}
